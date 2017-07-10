@@ -13,16 +13,16 @@
 
 	<body>
 		<ul id="dropdown1" class="dropdown-content">
-			<div v-for="(menu,index) in menus" @click="menuClick($event,index)">
+			<div v-for="(menu,index) in menus" @click="menuClick($event,index)" :id="menu.id">
 				<li>
-					<a href="#">{{menu}}</a>
+					<a href="#">{{menu.name}}</a>
 				</li>
 				<li class="divider"></li>
 			</div>
 		</ul>
 		<nav>
 			<div class="nav-wrapper">
-				<a href="#!" class="large material-icons logo">invert_colors_off</a>
+				<a href="index.html" class="large material-icons logo">invert_colors_off</a>
 				<ul class="right hide-on-med-and-down">
 					<!-- Dropdown Trigger -->
 					<li>

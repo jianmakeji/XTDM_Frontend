@@ -1,5 +1,8 @@
 $(document).ready(function() {
-	$(".header").load("header.html");
-
 	
+	$("#categoryId").hide();
+	
+	$("#addContent").click(function(){
+		alert($("#categoryId").html());
+	});
 });
