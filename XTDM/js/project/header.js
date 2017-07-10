@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	$("#managePanel").empty();
 	$("#managePanel").load("contentManage.html");
 });
 
@@ -16,6 +17,10 @@ var app = new Vue({
 			let id = clickObj.attr('id');
 			//let breadcrumbs = document.getElementById("breadcrumbs");
 			//breadcrumbs.innerText = "内容管理   > " + text;
+			
+			//$("#managePanel").empty();
+			//$("#managePanel").load("contentManage.html");
+			
 			$("#breadcrumbs").html("内容管理   > " + text);
 			$("#categoryId").html(id);
 		}
