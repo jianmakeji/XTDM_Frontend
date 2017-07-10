@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.logo {
+				margin-left: 30px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<ul id="dropdown1" class="dropdown-content">
+			<div v-for="(menu,index) in menus" @click="menuClick($event,index)">
+				<li>
+					<a href="#">{{menu}}</a>
+				</li>
+				<li class="divider"></li>
+			</div>
+		</ul>
+		<nav>
+			<div class="nav-wrapper">
+				<a href="#!" class="large material-icons logo">invert_colors_off</a>
+				<ul class="right hide-on-med-and-down">
+					<!-- Dropdown Trigger -->
+					<li>
+						<a class="dropdown-button" href="#!" data-activates="dropdown1">内容管理<i class="material-icons right">arrow_drop_down</i></a>
+					</li>
+
+					<li>
+						<a href="#">基本设置</a>
+					</li>
+					<li>
+						<a href="#">其它</a>
+					</li>
+
+				</ul>
+			</div>
+		</nav>
+	</body>
+	<script type="text/javascript" src="js/jquery/jquery-3.2.1.js" ></script>
+	<script type="text/javascript" src="js/materialize/materialize.js"></script>
+	<script type="text/javascript" src="js/vue/vue.js"></script>
+	<script type="text/javascript" src="js/project/header.js"></script>
+
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>内容管理</title>
+		<link rel="stylesheet" href="css/materialize/materialize.css" />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<style type="text/css">
+			#dataTable {
+				width: 80%;
+				height: auto;
+				margin: 15px auto;
+				border: dashed 1px #00838F;
+				clear: both;
+			}
+			
+			.pageBlock {
+				float: right;
+			}
+			
+			.activeBlock {
+				background-color: #ee6e73;
+				color: white;
+			}
+			
+			section a{
+				margin-top: 30px;
+				margin-right: 10%;
+				margin-bottom: 30px;
+				float: right;
+			}
+			
+			section p{
+				margin-top: 30px;
+				margin-left: 10%;
+				margin-bottom: 30px;
+				float: left;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="header">
+		</header>
+		<section>
+			<p id="breadcrumbs">内容管理</p>
+			<a class="waves-effect waves-light btn-large"><i class="material-icons left">playlist_add</i>添加内容</a>
+
+			<div id="dataTable">
+				<table class="striped centered">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Item Name</th>
+							<th>Item Price</th>
+							<th>Operation</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="value in datas">
+							<td>{{value.name}}</td>
+							<td>{{value.item}}</td>
+							<td>{{value.price}}</td>
+							<td>修改 删除</td>
+						</tr>
+					</tbody>
+					<tfoot>
+
+					</tfoot>
+				</table>
+
+				<ul class="pagination pageBlock">
+					<li class="disabled">
+						<a href="#!"><i class="material-icons">chevron_left</i></a>
+					</li>
+
+					<li v-for="n in pageCount">
+						<a href="javascript:void(0)" v-bind:class=" activeNumber === n ? 'active' : 'waves-effect'">{{ n }}</a>
+					</li>
+
+					<li class="waves-effect">
+						<a href="#!"><i class="material-icons">chevron_right</i></a>
+					</li>
+				</ul>
+			</div>
+		</section>
+	</body>
+	<script type="text/javascript" src="js/jquery/jquery-3.2.1.js"></script>
+	<script type="text/javascript" src="js/materialize/materialize.js"></script>
+	<script type="text/javascript" src="js/project/contentManage.js"></script>
+	<script type="text/javascript" src="js/vue/vue.js"></script>
+	<script type="text/javascript">
+		var vum = new Vue({
+			el: '#dataTable',
+			data: {
+				datas: "",
+				pageNum: "",
+				activeNumber: 1,
+				pageCount: 10
+			},
+			methods: {
+				showData: function() {
+					$.getJSON("table.json", function(data) {
+						vum.datas = data;
+					});
+				}
+			}
+		});
+
+		(function() {
+			var currentPage = 0;
+
+			$.getJSON("table.json", function(data) {
+				var pageNum = data.length / 10;
+				if(data.length % 10 != 0) {
+					pageNum = pageNum + 1;
+				}
+				vum.datas = data.slice(currentPage * 10, currentPage * 10 + 10);
+				vum.pageNum = pageNum;
+			});
+		})();
+	</script>
+
+</html>

@@ -1,0 +1,17 @@
+body{
+	background-color: lightgray;
+}
+
+#loginPanel {
+	width: 400px;
+	height: 300px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -150px 0 0 -200px;
+	background-color: white;
+}
+
+.center{
+	margin: 0 auto;
+}
