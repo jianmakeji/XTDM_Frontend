@@ -12,6 +12,7 @@
 	</head>
 
 	<body>
+		<p id="addContentSign">0</p>
 		<ul id="dropdown1" class="dropdown-content">
 			<div v-for="(menu,index) in menus" @click="menuClick($event,index)" :id="menu.id">
 				<li>
