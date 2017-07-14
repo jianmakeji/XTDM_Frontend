@@ -12,29 +12,21 @@
 	</head>
 
 	<body>
-		<p id="addContentSign">0</p>
-		<ul id="dropdown1" class="dropdown-content">
-			<div v-for="(menu,index) in menus" @click="menuClick($event,index)" :id="menu.id">
-				<li>
-					<a href="#">{{menu.name}}</a>
-				</li>
-				<li class="divider"></li>
-			</div>
-		</ul>
+		
 		<nav>
 			<div class="nav-wrapper">
 				<a href="index.html" class="large material-icons logo">invert_colors_off</a>
 				<ul class="right hide-on-med-and-down">
 					<!-- Dropdown Trigger -->
 					<li>
-						<a class="dropdown-button" href="#!" data-activates="dropdown1">内容管理<i class="material-icons right">arrow_drop_down</i></a>
+						<a href="#">文章</a>
 					</li>
 
 					<li>
-						<a href="#">基本设置</a>
+						<a href="#">音乐</a>
 					</li>
 					<li>
-						<a href="#">其它</a>
+						<a href="#">网站管理</a>
 					</li>
 
 				</ul>
