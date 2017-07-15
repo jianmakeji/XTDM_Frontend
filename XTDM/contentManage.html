@@ -22,27 +22,61 @@
 				color: white;
 			}
 			
-			section a{
-				margin-top: 30px;
-				margin-right: 10%;
-				margin-bottom: 30px;
-				float: right;
+			#addArticleContent {
+				margin-top: 10px;
+				margin-left: 10%;
+				margin-bottom: 20px;
 			}
 			
-			section p{
+			#addPptContent {
+				margin-top: 10px;
+				margin-left: 5%;
+				margin-bottom: 20px;
+			}
+			
+			section p {
 				margin-top: 30px;
 				margin-left: 10%;
-				margin-bottom: 30px;
+				margin-bottom: 10px;
+			}
+			
+			#dropdown {
+				width: 20%;
+				margin-left: 10%;
+				margin-top: 10px;
 				float: left;
+			}
+			
+			.search {
+				width: 20%;
+				margin-right: 10%;
+				margin-top: 10px;
+				float: right;
 			}
 		</style>
 	</head>
 
 	<body>
-		
+
 		<section>
 			<p id="breadcrumbs">内容管理</p><span id="categoryId"></span>
-			<a id="addContent" class="waves-effect waves-light btn-large"><i class="material-icons left">playlist_add</i>添加内容</a>
+			<a id="addArticleContent" class="waves-effect waves-light btn blue lighten-1"><i class="material-icons left">playlist_add</i>上传文章</a>
+			<a id="addPptContent" class="waves-effect waves-light btn blue lighten-1"><i class="material-icons left">playlist_add</i>上传幻灯片</a>
+			<div id="conditionPanel">
+				<div id="dropdown" class="input-field">
+					<select>
+						<option value="" disabled selected>请选择</option>
+						<option v-for="menu in menus" :value="menu.id">{{menu.name}}</option>
+					</select>
+					<label>选择文章类别</label>
+				</div>
+				<div class="input-field search">
+					<i class="material-icons prefix">search</i>
+					<input id="condition" type="text" class="validate"> 
+					<label for="condition">搜索</label>
+				</div>
+
+			</div>
 
 			<div id="dataTable">
 				<table class="striped centered">
@@ -59,7 +93,7 @@
 							<td>{{value.name}}</td>
 							<td>{{value.item}}</td>
 							<td>{{value.price}}</td>
-							<td>修改   删除</td>
+							<td>修改 删除</td>
 						</tr>
 					</tbody>
 					<tfoot>
@@ -85,6 +119,33 @@
 	</body>
 	<script type="text/javascript" src="js/project/contentManage.js"></script>
 	<script type="text/javascript">
+		var app = new Vue({
+			el: '#dropdown',
+			data: {
+				menus: [{
+					'id': '1',
+					'name': '人文'
+				}, {
+					'id': '2',
+					'name': '物语'
+				}, {
+					'id': '3',
+					'name': '风景'
+				}, {
+					'id': '4',
+					'name': '社区'
+				}]
+			},
+			methods: {
+				menuClick: function(event, index) {
+
+					$("#breadcrumbs").html("内容管理   > " + text);
+					$("#categoryId").html(id);
+
+				}
+			}
+		})
+
 		var vum = new Vue({
 			el: '#dataTable',
 			data: {
@@ -103,6 +164,8 @@
 		});
 
 		(function() {
+			$('select').material_select();
+
 			var currentPage = 0;
 
 			$.getJSON("table.json", function(data) {
@@ -113,6 +176,7 @@
 				vum.datas = data.slice(currentPage * 10, currentPage * 10 + 10);
 				vum.pageNum = pageNum;
 			});
+
 		})();
 	</script>
 
