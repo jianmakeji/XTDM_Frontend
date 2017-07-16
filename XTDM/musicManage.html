@@ -4,57 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>音乐管理</title>
-		<style type="text/css">
-			#addMusic {
-				margin-top: 30px;
-				margin-left: 10%;
-				margin-bottom: 20px;
-			}
-			
-			.search {
-				margin-top: 30px;
-				margin-right: 10%;
-				margin-bottom: 20px;
-				float: right;
-				width: 30%;
-			}
-			
-			#dataTable {
-				width: 80%;
-				height: auto;
-				margin: 15px auto;
-				border: dashed 1px #00838F;
-				clear: both;
-			}
-			
-			.pageBlock {
-				float: right;
-			}
-			
-			#addPanel {
-				width: 50%;
-				height: 40%;
-				background-color: white;
-				position: absolute;
-				top: calc(50% / 2);
-				left: calc(50% / 2);
-				display: none;
-				padding: 20px;
-				border: dashed 1px #00bbd3;
-			}
-			
-			#submit{
-				position: absolute;
-				bottom: 30px;
-				left: 30%;
-			}
-			
-			#cancel{
-				position: absolute;
-				bottom: 30px;
-				right: 30%;
-			}
-		</style>
+		<link rel="stylesheet" href="css/project/music.css" />
 	</head>
 
 	<body>
@@ -140,52 +90,5 @@
 		</section>
 	</body>
 	<script type="text/javascript" src="js/project/music.js"></script>
-	<script type="text/javascript">
-		var vum = new Vue({
-			el: '#dataTable',
-			data: {
-				datas: "",
-				pageNum: "",
-				activeNumber: 1,
-				pageCount: 10
-			},
-			methods: {
-				showData: function() {
-					$.getJSON("music.json", function(data) {
-						vum.datas = data;
-					});
-				}
-			}
-		});
-		
-		(function() {
-			
-			var currentPage = 0;
-
-			$.getJSON("music.json", function(data) {
-				var pageNum = data.length / 10;
-				if(data.length % 10 != 0) {
-					pageNum = pageNum + 1;
-				}
-				vum.datas = data.slice(currentPage * 10, currentPage * 10 + 10);
-				vum.pageNum = pageNum;
-			});
-
-			var showCategory = 0;
-			$("#addMusic").click(function() {
-				if(showCategory == 0) {
-					showCategory = 1;
-					$("#addPanel").show('slow');
-				} else {
-					showCategory = 0;
-					$("#addPanel").hide();
-				}
-			});
-			
-			$("#cancel").click(function(){
-				showCategory = 0;
-				$("#addPanel").hide();
-			});
-		})();
-	</script>
+	
 </html>

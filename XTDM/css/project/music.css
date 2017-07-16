@@ -1,0 +1,49 @@
+#addMusic {
+	margin-top: 30px;
+	margin-left: 10%;
+	margin-bottom: 20px;
+}
+
+.search {
+	margin-top: 30px;
+	margin-right: 10%;
+	margin-bottom: 20px;
+	float: right;
+	width: 30%;
+}
+
+#dataTable {
+	width: 80%;
+	height: auto;
+	margin: 15px auto;
+	border: dashed 1px #00838F;
+	clear: both;
+}
+
+.pageBlock {
+	float: right;
+}
+
+#addPanel {
+	width: 50%;
+	height: 40%;
+	background-color: white;
+	position: absolute;
+	top: calc(50% / 2);
+	left: calc(50% / 2);
+	display: none;
+	padding: 20px;
+	border: dashed 1px #00bbd3;
+}
+
+#submit {
+	position: absolute;
+	bottom: 30px;
+	left: 30%;
+}
+
+#cancel {
+	position: absolute;
+	bottom: 30px;
+	right: 30%;
+}
