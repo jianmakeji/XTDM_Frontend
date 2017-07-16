@@ -11,6 +11,6 @@ $(document).ready(function() {
 
 	$("a[name='manage']").click(function() {
 		$("#managePanel").empty();
-		$("#managePanel").load("manage.html");
+		$("#managePanel").load("categorySetting.html");
 	});
 });

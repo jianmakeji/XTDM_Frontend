@@ -4,56 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>内容管理</title>
-		<style type="text/css">
-			#dataTable {
-				width: 80%;
-				height: auto;
-				margin: 15px auto;
-				border: dashed 1px #00838F;
-				clear: both;
-			}
-			
-			.pageBlock {
-				float: right;
-			}
-			
-			.activeBlock {
-				background-color: #ee6e73;
-				color: white;
-			}
-			
-			#addArticleContent {
-				margin-top: 10px;
-				margin-left: 10%;
-				margin-bottom: 20px;
-			}
-			
-			#addPptContent {
-				margin-top: 10px;
-				margin-left: 5%;
-				margin-bottom: 20px;
-			}
-			
-			section p {
-				margin-top: 30px;
-				margin-left: 10%;
-				margin-bottom: 10px;
-			}
-			
-			#dropdown {
-				width: 20%;
-				margin-left: 10%;
-				margin-top: 10px;
-				float: left;
-			}
-			
-			.search {
-				width: 20%;
-				margin-right: 10%;
-				margin-top: 10px;
-				float: right;
-			}
-		</style>
+		<link rel="stylesheet" href="css/project/contentManage.css" />
 	</head>
 
 	<body>
@@ -118,76 +69,5 @@
 		</section>
 	</body>
 	<script type="text/javascript" src="js/project/contentManage.js"></script>
-	<script type="text/javascript">
-		var app = new Vue({
-			el: '#dropdown',
-			data: {
-				menus: [{
-					'id': '1',
-					'name': '人文'
-				}, {
-					'id': '2',
-					'name': '物语'
-				}, {
-					'id': '3',
-					'name': '风景'
-				}, {
-					'id': '4',
-					'name': '社区'
-				}]
-			},
-			methods: {
-				menuClick: function(event, index) {
-
-					$("#breadcrumbs").html("内容管理   > " + text);
-					$("#categoryId").html(id);
-
-				}
-			}
-		})
-
-		var vum = new Vue({
-			el: '#dataTable',
-			data: {
-				datas: "",
-				pageNum: "",
-				activeNumber: 1,
-				pageCount: 10
-			},
-			methods: {
-				showData: function() {
-					$.getJSON("table.json", function(data) {
-						vum.datas = data;
-					});
-				}
-			}
-		});
-
-		(function() {
-			$('select').material_select();
-
-			var currentPage = 0;
-
-			$.getJSON("table.json", function(data) {
-				var pageNum = data.length / 10;
-				if(data.length % 10 != 0) {
-					pageNum = pageNum + 1;
-				}
-				vum.datas = data.slice(currentPage * 10, currentPage * 10 + 10);
-				vum.pageNum = pageNum;
-			});
-
-			$("#addArticleContent").click(function(){
-				$("#managePanel").empty();
-				$("#managePanel").load("addArticleContent.html");
-			});
-			
-			$("#addPptContent").click(function(){
-				$("#managePanel").empty();
-				$("#managePanel").load("addPptContent.html");
-			});
-			
-		})();
-	</script>
 
 </html>

@@ -1,0 +1,48 @@
+#dataTable {
+	width: 80%;
+	height: auto;
+	margin: 15px auto;
+	border: dashed 1px #00838F;
+	clear: both;
+}
+
+.pageBlock {
+	float: right;
+}
+
+.activeBlock {
+	background-color: #ee6e73;
+	color: white;
+}
+
+#addArticleContent {
+	margin-top: 10px;
+	margin-left: 10%;
+	margin-bottom: 20px;
+}
+
+#addPptContent {
+	margin-top: 10px;
+	margin-left: 5%;
+	margin-bottom: 20px;
+}
+
+section p {
+	margin-top: 30px;
+	margin-left: 10%;
+	margin-bottom: 10px;
+}
+
+#dropdown {
+	width: 20%;
+	margin-left: 10%;
+	margin-top: 10px;
+	float: left;
+}
+
+.search {
+	width: 20%;
+	margin-right: 10%;
+	margin-top: 10px;
+	float: right;
+}

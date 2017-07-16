@@ -1,0 +1,61 @@
+#content {
+	width: 80%;
+	height: auto;
+	margin: 30px auto;
+	padding-bottom: 30px;
+}
+
+#content button {
+	float: right;
+	margin-left: 20px;
+}
+
+#dropdown {
+	width: 20%;
+	margin-left: 20px;
+	margin-top: 10px;
+	display: inline-block;
+}
+
+#recommand {
+	margin-left: 100px;
+	display: inline-block;
+	padding-top: 20px;
+}
+
+#thumbPic {
+	float: left;
+}
+
+#thumbPic img {
+	width: 100%;
+	height: auto;
+}
+
+#bgPic {
+	float: right;
+}
+
+#bgPic img {
+	width: 100%;
+	height: auto;
+}
+
+#pptContent {
+	float: left;
+	width: 70%;
+	margin-top: 40px;
+}
+
+#asideContent {
+	width: 18%;
+	height: auto;
+	margin-left: 2%;
+	margin-top: 20px;
+	float: right;
+}
+
+#dataTable img {
+	width: 100px;
+	height: auto;
+}
