@@ -60,8 +60,8 @@
 
 		<section>
 			<p id="breadcrumbs">内容管理</p><span id="categoryId"></span>
-			<a id="addArticleContent" class="waves-effect waves-light btn blue lighten-1"><i class="material-icons left">playlist_add</i>上传文章</a>
-			<a id="addPptContent" class="waves-effect waves-light btn blue lighten-1"><i class="material-icons left">playlist_add</i>上传幻灯片</a>
+			<a id="addArticleContent" class="waves-effect waves-light btn cyan lighten-1"><i class="material-icons left">playlist_add</i>上传文章</a>
+			<a id="addPptContent" class="waves-effect waves-light btn cyan lighten-1"><i class="material-icons left">playlist_add</i>上传幻灯片</a>
 			<div id="conditionPanel">
 				<div id="dropdown" class="input-field">
 					<select>
@@ -177,6 +177,16 @@
 				vum.pageNum = pageNum;
 			});
 
+			$("#addArticleContent").click(function(){
+				$("#managePanel").empty();
+				$("#managePanel").load("addArticleContent.html");
+			});
+			
+			$("#addPptContent").click(function(){
+				$("#managePanel").empty();
+				$("#managePanel").load("addPptContent.html");
+			});
+			
 		})();
 	</script>
 

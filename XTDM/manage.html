@@ -23,12 +23,13 @@
 			#addPanel {
 				width: 50%;
 				height: 50%;
-				background-color: #D0D0D0;
 				position: absolute;
 				top: calc(50% / 2);
 				left: calc(50% / 2);
 				display: none;
 				padding: 20px;
+				border: dashed 1px #00bbd3;
+				background-color: white;
 			}
 			
 			#addPanel img {
@@ -55,7 +56,7 @@
 
 	<body>
 		<section>
-			<a id="addCategory" class="waves-effect waves-light btn blue lighten-1"><i class="material-icons left">playlist_add</i>新建条目</a>
+			<a id="addCategory" class="waves-effect waves-light btn cyan lighten-1"><i class="material-icons left">playlist_add</i>新建条目</a>
 
 			<div id="dataTable">
 				<table class="striped centered">
@@ -100,7 +101,7 @@
 
 			<div class="file-field input-field">
 
-				<div class="btn">
+				<div class="btn cyan lighten-1">
 					<span>文件</span>
 					<input type="file">
 				</div>
@@ -108,10 +109,10 @@
 					<input class="file-path validate" type="text">
 				</div>
 			</div>
-			<button id="submit" class="btn waves-effect waves-light" type="submit" name="action">提交
+			<button id="submit" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">提交
     			<i class="material-icons right">send</i>
   			</button>
-  			<button id="cancel" class="btn waves-effect waves-light" type="submit" name="action">取消
+  			<button id="cancel" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">取消
     			<i class="material-icons right">replay</i>
   			</button>
 		</section>

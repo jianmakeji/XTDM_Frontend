@@ -1,0 +1,65 @@
+var app = new Vue({
+	el: '#dropdown',
+	data: {
+		menus: [{
+			'id': '1',
+			'name': '人文'
+		}, {
+			'id': '2',
+			'name': '物语'
+		}, {
+			'id': '3',
+			'name': '风景'
+		}, {
+			'id': '4',
+			'name': '社区'
+		}]
+	},
+	methods: {
+		menuClick: function(event, index) {
+
+		}
+	}
+});
+
+var vum = new Vue({
+	el: '#dataTable',
+	data: {
+		datas: ""
+	},
+	methods: {
+		showData: function() {
+			$.getJSON("ppt.json", function(data) {
+				vum.datas = data;
+			});
+		}
+	}
+});
+
+$(document).ready(function() {
+	$('select').material_select();
+
+	$('.chips-initial').material_chip({
+		data: [{
+			tag: '新通道',
+		}],
+	});
+
+	$("#submitBtn").click(function() {
+
+	});
+
+	$("#browserBtn").click(function() {
+
+	});
+
+	$("#cancelBtn").click(function() {
+		$("#managePanel").empty();
+		$("#managePanel").load("contentManage.html");
+	});
+
+	$.getJSON("ppt.json", function(data) {
+
+		vum.datas = data;
+	});
+});

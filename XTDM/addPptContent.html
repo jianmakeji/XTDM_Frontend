@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#content {
+				width: 80%;
+				height: auto;
+				margin: 30px auto;
+				padding-bottom: 30px;
+			}
+			
+			#content button {
+				float: right;
+				margin-left: 20px;
+			}
+			
+			#dropdown {
+				width: 20%;
+				margin-left: 20px;
+				margin-top: 10px;
+				display: inline-block;
+			}
+			
+			#recommand {
+				margin-left: 100px;
+				display: inline-block;
+				padding-top: 20px;
+			}
+			
+			#thumbPic {
+				float: left;
+			}
+			
+			#thumbPic img {
+				width: 100%;
+				height: auto;
+			}
+			
+			#bgPic {
+				float: right;
+			}
+			
+			#bgPic img {
+				width: 100%;
+				height: auto;
+			}
+			
+			#pptContent {
+				float: left;
+				width: 70%;
+				margin-top: 40px;
+			}
+			
+			#asideContent {
+				width: 18%;
+				height: auto;
+				margin-left: 2%;
+				margin-top: 20px;
+				float: right;
+			}
+			
+			#dataTable img{
+				width: 100px;
+				height: auto;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<header class="header">
+
+		</header>
+		<section id="content">
+
+			<div id="contentHeader">
+				<button id="submitBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">提交
+    			<i class="material-icons right">send</i>
+  			</button>
+				<button id="browserBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">预览
+    			<i class="material-icons right">view_stream</i>
+  			</button>
+				<button id="cancelBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">取消
+    			<i class="material-icons right">replay</i>
+  			</button>
+			</div>
+
+			<section id="pptContent">
+				<div id="picTxt" class="col s12">
+					<div class="row">
+						<div class="input-field col s12">
+							<i class="small material-icons prefix">subtitles</i>
+							<input id="picTxt_title" type="text" class="validate">
+							<label for="picTxt_text">标题</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="input-field col s12">
+							<i class="small material-icons prefix">subtitles</i>
+							<textarea id="picTxt_abstract" class="materialize-textarea"></textarea>
+							<label for="picTxt_abstract">摘要</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col s12">
+							<i class="small material-icons prefix">note_add</i>
+							<div id="tag" class="chips chips-initial"></div>
+						</div>
+					</div>
+					<div class="row">
+						<div id="dropdown" class="input-field">
+							<select>
+								<option value="" disabled selected>请选择</option>
+								<option v-for="menu in menus" :value="menu.id">{{menu.name}}</option>
+							</select>
+							<label>选择文章类别</label>
+						</div>
+
+						<div id="recommand">
+							<label>是否设置为推荐</label>
+							<p>
+								<input name="recommandGroup" type="radio" id="recommand1" />
+								<label for="recommand1">是</label>
+
+								<input name="recommandGroup" type="radio" id="recommand2" />
+								<label for="recommand2">否</label>
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="file-field input-field">
+
+							<div class="btn cyan lighten-1">
+								<span>上传文件</span>
+								<input type="file">
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div id="dataTable">
+							<table class="striped centered">
+								<thead>
+									<tr>
+										<th>图片</th>
+										<th>描述</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="value in datas">
+										<td><img :src="value.name"/></td>
+										<td>{{value.describe}}</td>
+										<td>修改 删除</td>
+									</tr>
+								</tbody>
+								<tfoot>
+
+								</tfoot>
+							</table>
+
+						</div>
+					</div>
+			</section>
+
+			<aside id="asideContent">
+				<div class="row">
+					<div id="thumbPic">
+
+						<div class="file-field input-field">
+
+							<div class="btn cyan lighten-1">
+								<span>缩略图</span>
+								<input type="file">
+							</div>
+
+							<div class="file-path-wrapper">
+								<input class="file-path validate" type="text">
+							</div>
+						</div>
+						<p>图片比例为1:1</p>
+						<img src="img/thumb.jpg" />
+
+					</div>
+
+					<div id="bgPic">
+
+						<div class="file-field input-field">
+
+							<div class="btn cyan lighten-1">
+								<span>背景图</span>
+								<input type="file">
+							</div>
+
+							<div class="file-path-wrapper">
+								<input class="file-path validate" type="text">
+							</div>
+						</div>
+						<p>请上传1280*720尺寸的图片</p>
+						<img src="img/thumb.jpg" />
+					</div>
+
+				</div>
+			</aside>
+
+			</div>
+		</section>
+	</body>
+
+	<script type="text/javascript" src="js/project/addPptContent.js"></script>
+
+</html>
