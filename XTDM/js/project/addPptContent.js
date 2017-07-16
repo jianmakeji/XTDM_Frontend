@@ -62,4 +62,20 @@ $(document).ready(function() {
 
 		vum.datas = data;
 	});
+
+	var showCategory = 0;
+	$("#addFile").click(function() {
+		if(showCategory == 0) {
+			showCategory = 1;
+			$("#addPanel").show('slow');
+		} else {
+			showCategory = 0;
+			$("#addPanel").hide();
+		}
+	});
+
+	$("#cancel").click(function() {
+		showCategory = 0;
+		$("#addPanel").hide();
+	});
 });

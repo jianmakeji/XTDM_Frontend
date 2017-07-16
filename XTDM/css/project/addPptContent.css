@@ -5,7 +5,7 @@
 	padding-bottom: 30px;
 }
 
-#content button {
+#contentHeader button {
 	float: right;
 	margin-left: 20px;
 }
@@ -58,4 +58,38 @@
 #dataTable img {
 	width: 100px;
 	height: auto;
+}
+
+#addPanel {
+	width: 50%;
+	height: 50%;
+	background-color: white;
+	position: absolute;
+	top: calc(50% / 2);
+	left: calc(50% / 2);
+	display: none;
+	padding: 20px;
+	border: dashed 1px #00bbd3;
+}
+
+#addPanelForm{
+	width: 50%;
+	float: left;
+}
+
+#addPanel img{
+	width: 40%;
+	float: right;
+}
+
+#submit {
+	position: absolute;
+	bottom: 30px;
+	left: 30%;
+}
+
+#cancel {
+	position: absolute;
+	bottom: 30px;
+	right: 30%;
 }

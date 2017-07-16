@@ -1,92 +1,94 @@
 #myEditor {
-				width: 100%;
-				height: 400px;
-			}
-			
-			#content {
-				width: 80%;
-				height: auto;
-				margin: 30px auto;
-			}
-			
-			#content button {
-				float: right;
-				margin-left: 20px;
-			}
-			
-			#dropdown {
-				width: 20%;
-				margin-left: 20px;
-				margin-top: 10px;
-				display: inline-block;
-			}
-			
-			#recommand {
-				margin-left: 100px;
-				display: inline-block;
-				padding-top: 20px;
-			}
-			
-			#thumbPic{
-				float: left;
-			}
-			
-			#thumbPic img{
-				width: 100%;
-				height: auto;
-			}
-			
-			#bgPic{
-				float: right;
-			}
-			
-			#bgPic img{
-				width: 100%;
-				height: auto;
-			}
-			#myEditor {
-				width: 100%;
-				height: 400px;
-			}
-			
-			#content {
-				width: 80%;
-				height: auto;
-				margin: 30px auto;
-			}
-			
-			#content button {
-				float: right;
-				margin-left: 20px;
-			}
-			
-			#dropdown {
-				width: 20%;
-				margin-left: 20px;
-				margin-top: 10px;
-				display: inline-block;
-			}
-			
-			#recommand {
-				margin-left: 100px;
-				display: inline-block;
-				padding-top: 20px;
-			}
-			
-			#thumbPic {
-				float: left;
-			}
-			
-			#thumbPic img {
-				width: 100%;
-				height: auto;
-			}
-			
-			#bgPic {
-				float: right;
-			}
-			
-			#bgPic img {
-				width: 100%;
-				height: auto;
-			}
+	width: 100%;
+	height: 400px;
+}
+
+#content {
+	width: 80%;
+	height: auto;
+	margin: 30px auto;
+}
+
+#content button {
+	float: right;
+	margin-left: 20px;
+}
+
+#dropdown {
+	width: 20%;
+	margin-left: 20px;
+	margin-top: 10px;
+	display: inline-block;
+}
+
+#recommand {
+	margin-left: 100px;
+	display: inline-block;
+	padding-top: 20px;
+}
+
+#thumbPic {
+	float: left;
+}
+
+#thumbPic img {
+	width: 100%;
+	height: auto;
+}
+
+#bgPic {
+	float: right;
+}
+
+#bgPic img {
+	width: 100%;
+	height: auto;
+}
+
+#myEditor {
+	width: 100%;
+	height: 400px;
+}
+
+#content {
+	width: 80%;
+	height: auto;
+	margin: 30px auto;
+}
+
+#content button {
+	float: right;
+	margin-left: 20px;
+}
+
+#dropdown {
+	width: 20%;
+	margin-left: 20px;
+	margin-top: 10px;
+	display: inline-block;
+}
+
+#recommand {
+	margin-left: 100px;
+	display: inline-block;
+	padding-top: 20px;
+}
+
+#thumbPic {
+	float: left;
+}
+
+#thumbPic img {
+	width: 100%;
+	height: auto;
+}
+
+#bgPic {
+	float: right;
+}
+
+#bgPic img {
+	width: 100%;
+	height: auto;
+}
+
