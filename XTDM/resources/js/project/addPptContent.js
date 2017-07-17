@@ -29,7 +29,7 @@ var vum = new Vue({
 	},
 	methods: {
 		showData: function() {
-			$.getJSON("ppt.json", function(data) {
+			$.getJSON("resources/ppt.json", function(data) {
 				vum.datas = data;
 			});
 		}

@@ -5,7 +5,7 @@ var vum = new Vue({
 	},
 	methods: {
 		showData: function() {
-			$.getJSON("category.json", function(data) {
+			$.getJSON("resources/category.json", function(data) {
 				vum.datas = data;
 			});
 		}
@@ -16,7 +16,7 @@ var vum = new Vue({
 
 	var currentPage = 0;
 
-	$.getJSON("category.json", function(data) {
+	$.getJSON("resources/category.json", function(data) {
 
 		vum.datas = data;
 	});

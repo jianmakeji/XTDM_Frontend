@@ -8,7 +8,7 @@ var vum = new Vue({
 	},
 	methods: {
 		showData: function() {
-			$.getJSON("music.json", function(data) {
+			$.getJSON("resources/music.json", function(data) {
 				vum.datas = data;
 			});
 		}
@@ -19,7 +19,7 @@ var vum = new Vue({
 
 	var currentPage = 0;
 
-	$.getJSON("music.json", function(data) {
+	$.getJSON("resources/music.json", function(data) {
 		var pageNum = data.length / 10;
 		if(data.length % 10 != 0) {
 			pageNum = pageNum + 1;

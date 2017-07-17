@@ -35,7 +35,7 @@ var vum = new Vue({
 	},
 	methods: {
 		showData: function() {
-			$.getJSON("table.json", function(data) {
+			$.getJSON("resources/table.json", function(data) {
 				vum.datas = data;
 			});
 		}
@@ -47,7 +47,7 @@ var vum = new Vue({
 
 	var currentPage = 0;
 
-	$.getJSON("table.json", function(data) {
+	$.getJSON("resources/table.json", function(data) {
 		var pageNum = data.length / 10;
 		if(data.length % 10 != 0) {
 			pageNum = pageNum + 1;

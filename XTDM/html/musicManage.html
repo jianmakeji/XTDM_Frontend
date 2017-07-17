@@ -3,27 +3,34 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>类别设置</title>
-		<link rel="stylesheet" href="resources/css/project/categorySetting.css" />
+		<title>音乐管理</title>
+		<link rel="stylesheet" href="../resources/css/project/music.css" />
 	</head>
 
 	<body>
 		<section>
-			<a id="addCategory" class="waves-effect waves-light btn cyan lighten-1"><i class="material-icons left">playlist_add</i>新建条目</a>
-
+			<a id="addMusic" class="waves-effect waves-light btn cyan lighten-1"><i class="material-icons left">playlist_add</i>上传音乐</a>
+			<div class="input-field search">
+				<i class="material-icons prefix">search</i>
+				<input id="condition" type="text" class="validate">
+				<label for="condition">搜索</label>
+			</div>
+			
 			<div id="dataTable">
 				<table class="striped centered">
 					<thead>
 						<tr>
 							<th>名称</th>
-							<th>描述</th>
+							<th>作者</th>
+							<th>上传日期</th>
 							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr v-for="value in datas">
 							<td>{{value.name}}</td>
-							<td>{{value.describe}}</td>
+							<td>{{value.author}}</td>
+							<td>{{value.date}}</td>
 							<td>修改 删除</td>
 						</tr>
 					</tbody>
@@ -32,9 +39,22 @@
 					</tfoot>
 				</table>
 
+				<ul class="pagination pageBlock">
+					<li class="disabled">
+						<a href="#!"><i class="material-icons">chevron_left</i></a>
+					</li>
+
+					<li v-for="n in pageCount">
+						<a href="javascript:void(0)" v-bind:class=" activeNumber === n ? 'active' : 'waves-effect'">{{ n }}</a>
+					</li>
+
+					<li class="waves-effect">
+						<a href="#!"><i class="material-icons">chevron_right</i></a>
+					</li>
+				</ul>
 			</div>
 		</section>
-
+		
 		<section id="addPanel">
 			<div class="row">
 				<div class="input-field col s12">
@@ -47,11 +67,10 @@
 				<div class="input-field col s12">
 					<i class="small material-icons prefix">subtitles</i>
 					<input id="describe" type="text" class="validate">
-					<label for="describe">描述</label>
+					<label for="describe">作者</label>
 				</div>
 			</div>
-			<img src="resources/img/thumb.jpg" />
-
+			
 			<div class="file-field input-field">
 
 				<div class="btn cyan lighten-1">
@@ -70,7 +89,6 @@
   			</button>
 		</section>
 	</body>
-	<script type="text/javascript" src="resources/js/project/manage.js"></script>
-	<script type="text/javascript" src="resources/js/project/categorySetting.js"></script>
+	<script type="text/javascript" src="../resources/js/project/music.js"></script>
 	
 </html>
