@@ -2,21 +2,12 @@ var vum = new Vue({
 	el: '#dataTable',
 	data: {
 		datas: ""
-	},
-	methods: {
-		showData: function() {
-			$.getJSON("resources/category.json", function(data) {
-				vum.datas = data;
-			});
-		}
 	}
 });
 
 (function() {
 
-	var currentPage = 0;
-
-	$.getJSON("resources/category.json", function(data) {
+	$.getJSON("../resources/category.json", function(data) {
 
 		vum.datas = data;
 	});
@@ -37,4 +28,46 @@ var vum = new Vue({
 		$("#addPanel").hide();
 	});
 
+	$("#submit").click(function() {
+		let title = $("#title").val();
+		let describe = $("#describe").val();
+
+		if(title == "") {
+			Materialize.toast('标题不能为空!', 4000);
+			return;
+		}
+
+		if(describe == "") {
+			Materialize.toast('描述不能为空!', 4000);
+			return;
+		}
+
+		let data = {"title":title,"describe":describe};
+		
+		$.ajax({
+
+			type: "POST",
+			url: "some.php",
+			dataType:"json",
+			data: data,
+			beforeSend:function(){
+				$("#circleProgress").show();
+			},
+			success: function(msg) {
+				$("#circleProgress").hide();
+			},
+			statusCode: {404: function() {
+    				alert('page not found');
+  				},500:function(){
+  				
+  				}
+			}
+		});
+	});
+
+	$("#cancel").click(function() {
+		showCategory = 0;
+		$("#addPanel").hide();
+		$("#circleProgress").hide();
+	});
 })();
