@@ -59,7 +59,6 @@
 
 					<div id="container">
 						<a id="selectfiles" href="javascript:void(0);" class='btn'>选择文件</a>
-						<a id="postfiles" href="javascript:void(0);" class='btn'>开始上传</a>
 					</div>
 
 					<pre id="console"></pre>
@@ -214,9 +213,6 @@
 						title: "Image files",
 						extensions: "jpg,jpeg,png",
 						mimeTypes: 'image/jpg,image/jpeg,image/png'
-					}, {
-						title: "Zip files",
-						extensions: "zip,rar"
 					}
 				],
 				max_file_size: '10mb', //最大只能上传10mb的文件
@@ -226,10 +222,7 @@
 
 			init: {
 				PostInit: function() {
-					document.getElementById('postfiles').onclick = function() {
-						set_upload_param(uploader, '', false);
-						return false;
-					};
+					
 				},
 
 				FilesAdded: function(up, files) {
@@ -246,6 +239,8 @@
 									'<div class="progress"><div class="progress-bar" style="width: 0%"></div></div>' +
 									'</div>';
 							});
+							
+					set_upload_param(uploader, '', false);
 				},
 
 				BeforeUpload: function(up, file) {
