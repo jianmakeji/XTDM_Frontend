@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>类别设置</title>
-		<link type="text/css" rel="stylesheet" href="../resources/css/webuploader/webuploader.css" />
+		<link type="text/css" rel="stylesheet" href="../resources/css/jquery/themes/humanity/jquery-ui.css" />
 		<link rel="stylesheet" href="../resources/css/project/categorySetting.css" />
 	</head>
 
@@ -51,10 +51,21 @@
 					<label for="describe">描述</label>
 				</div>
 			</div>
-			<div id="uploader-demo">
-				<!--用来存放item-->
-				<div id="fileList" class="uploader-list"></div>
-				<div id="filePicker">选择图片</div>
+			<div id="imagePanel">
+				<img src="../resources/img/thumb.jpg" />
+
+				<div id="operateImg">
+					<div id="ossfile"></div>
+
+					<div id="container">
+						<a id="selectfiles" href="javascript:void(0);" class='btn'>选择文件</a>
+						<a id="postfiles" href="javascript:void(0);" class='btn'>开始上传</a>
+					</div>
+
+					<pre id="console"></pre>
+					<p>&nbsp;</p>
+				</div>
+
 			</div>
 
 			<button id="submit" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">提交
@@ -79,7 +90,8 @@
 			</div>
 		</div>
 	</body>
-	<script type="text/javascript" src="../resources/js/webuploader/webuploader.js"></script>
+	<script type="text/javascript" src="../resources/js/jquery/jquery-ui.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="../resources/js/plupload-2.3.1/plupload.full.min.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="../resources/js/project/categorySetting.js"></script>
 	<script type="text/javascript">
 		var accessid = '';
@@ -94,8 +106,6 @@
 		var g_object_name = '';
 		var now = timestamp = Date.parse(new Date()) / 1000;
 
-		var progressbar = $("#progressbar");
-
 		function send_request() {
 			var xmlhttp = null;
 			if(window.XMLHttpRequest) {
@@ -105,7 +115,7 @@
 			}
 
 			if(xmlhttp != null) {
-				serverUrl = 'uploadKey'
+				serverUrl = 'http://localhost:8080/alioss/uploadKey'
 				xmlhttp.open("GET", serverUrl, false);
 				xmlhttp.send(null);
 				return xmlhttp.responseText
@@ -181,108 +191,116 @@
 				'signature': signature,
 			};
 
-			up.option({
+			up.setOption({
 				'url': host,
 				'multipart_params': new_multipart_params
 			});
 
+			up.start();
 		}
 
-		jQuery(function() {
+		var uploader = new plupload.Uploader({
+			runtimes: 'html5,flash,silverlight,html4',
+			browse_button: 'selectfiles',
+			//multi_selection: false,
+			container: document.getElementById('container'),
+			flash_swf_url: '../resources/js/plupload-2.3.1/Moxie.swf',
+			silverlight_xap_url: '../resources/js/plupload-2.3.1/Moxie.xap',
+			url: 'http://oss.aliyuncs.com',
 
-			var $list = $("#fileList");
-			var uploader = WebUploader.create({
-
-				// 选完文件后，是否自动上传。
-				auto: true,
-
-				// swf文件路径
-				swf: '../resources/js/webuploaders/Uploader.swf',
-
-				// 文件接收服务端。
-				server: 'http://webuploader.duapp.com/server/fileupload.php',
-
-				// 选择文件的按钮。可选。
-				// 内部根据当前运行是创建，可能是input元素，也可能是flash.
-				pick: '#filePicker',
-
-				// 只允许选择图片文件。
-				accept: {
-					title: 'Images',
-					extensions: 'gif,jpg,jpeg,bmp,png',
-					mimeTypes: 'image/*'
-				}
-			});
-
-			uploader.on('startUpload', function() {
-				console.log('startUpload');
-				set_upload_param(uploader, '', false);
-			});
-			// 当有文件添加进来的时候
-			uploader.on('fileQueued', function(file) {
-				var $li = $(
-						'<div id="' + file.id + '" class="file-item thumbnail">' +
-						'<img>' +
-						'<div class="info">' + file.name + '</div>' +
-						'</div>'
-					),
-					$img = $li.find('img');
-
-				// $list为容器jQuery实例
-				$list.append($li);
-
-				// 创建缩略图
-				// 如果为非图片文件，可以不用调用此方法。
-				// thumbnailWidth x thumbnailHeight 为 100 x 100
-				uploader.makeThumb(file, function(error, src) {
-					if(error) {
-						$img.replaceWith('<span>不能预览</span>');
-						return;
+			filters: {
+				mime_types: [ //只允许上传图片和zip,rar文件
+					{
+						title: "Image files",
+						extensions: "jpg,jpeg,png",
+						mimeTypes: 'image/jpg,image/jpeg,image/png'
+					}, {
+						title: "Zip files",
+						extensions: "zip,rar"
 					}
+				],
+				max_file_size: '10mb', //最大只能上传10mb的文件
+				prevent_duplicates: true
+				//不允许选取重复文件
+			},
 
-					$img.attr('src', src);
-				}, '100px', '100px');
-				
-				set_upload_param(up, file.name, true);
-			});
+			init: {
+				PostInit: function() {
+					document.getElementById('postfiles').onclick = function() {
+						set_upload_param(uploader, '', false);
+						return false;
+					};
+				},
 
-			uploader.on('uploadProgress', function(file, percentage) {
-				var $li = $('#' + file.id),
-					$percent = $li.find('.progress span');
+				FilesAdded: function(up, files) {
+					plupload
+						.each(
+							files,
+							function(file) {
+								document.getElementById('ossfile').innerHTML += '<div id="' + file.id + '">' +
+									file.name +
+									' (' +
+									plupload
+									.formatSize(file.size) +
+									')<b></b>' +
+									'<div class="progress"><div class="progress-bar" style="width: 0%"></div></div>' +
+									'</div>';
+							});
+				},
 
-				// 避免重复创建
-				if(!$percent.length) {
-					$percent = $('<p class="progress"><span></span></p>')
-						.appendTo($li)
-						.find('span');
+				BeforeUpload: function(up, file) {
+
+					set_upload_param(up, file.name, true);
+				},
+
+				UploadProgress: function(up, file) {
+					var d = document.getElementById(file.id);
+					d.getElementsByTagName('b')[0].innerHTML = '<span>' +
+						file.percent + "%</span>";
+					var prog = d.getElementsByTagName('div')[0];
+					var progBar = prog.getElementsByTagName('div')[0]
+					progBar.style.width = 2 * file.percent + 'px';
+					progBar.setAttribute('aria-valuenow', file.percent);
+				},
+
+				FileUploaded: function(up, file, info) {
+					if(info.status == 200) {
+						console.log(info.response);
+						document.getElementById(file.id)
+							.getElementsByTagName('b')[0].innerHTML = 'upload to oss success, object name:' +
+							get_uploaded_object_name(file.name);
+					} else {
+						document.getElementById(file.id)
+							.getElementsByTagName('b')[0].innerHTML = info.response;
+					}
+				},
+
+				Error: function(up, err) {
+					if(err.code == -600) {
+						document
+							.getElementById('console')
+							.appendChild(
+								document
+								.createTextNode("\n选择的文件太大了!"));
+					} else if(err.code == -601) {
+						document
+							.getElementById('console')
+							.appendChild(
+								document
+								.createTextNode("\n选择的文件后缀不对!"));
+					} else if(err.code == -602) {
+						document.getElementById('console').appendChild(
+							document.createTextNode("\n这个文件已经上传过一遍了"));
+					} else {
+						document.getElementById('console').appendChild(
+							document.createTextNode("\nError xml:" +
+								err.response));
+					}
 				}
-
-				$percent.css('width', percentage * 100 + '%');
-			});
-
-			// 文件上传成功，给item添加成功class, 用样式标记上传成功。
-			uploader.on('uploadSuccess', function(file) {
-				$('#' + file.id).addClass('upload-state-done');
-			});
-
-			// 文件上传失败，显示上传出错。
-			uploader.on('uploadError', function(file) {
-				var $li = $('#' + file.id),
-					$error = $li.find('div.error');
-
-				// 避免重复创建
-				if(!$error.length) {
-					$error = $('<div class="error"></div>').appendTo($li);
-				}
-
-				$error.text('上传失败');
-			});
-
-			// 完成上传完了，成功或者失败，先删除进度条。
-			uploader.on('uploadComplete', function(file) {
-				$('#' + file.id).find('.progress').remove();
-			});
+			}
 		});
+
+		uploader.init();
 	</script>
 
 </html>

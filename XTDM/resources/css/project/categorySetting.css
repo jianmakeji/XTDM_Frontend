@@ -51,3 +51,15 @@
 	display: none;
 }
 
+#imagePanel img{
+	width: 25%;
+	height: auto;
+	float: left;
+}
+
+#operateImg{
+	width: 50%;
+	height: auto;
+	margin-left: 10%;
+	float: right;
+}
