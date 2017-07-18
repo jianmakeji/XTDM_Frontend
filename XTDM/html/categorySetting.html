@@ -4,6 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>类别设置</title>
+		<link type="text/css" rel="stylesheet" href="../resources/css/webuploader/webuploader.css" />
 		<link rel="stylesheet" href="../resources/css/project/categorySetting.css" />
 	</head>
 
@@ -50,18 +51,12 @@
 					<label for="describe">描述</label>
 				</div>
 			</div>
-			<img src="../resources/img/thumb.jpg" />
-
-			<div class="file-field input-field">
-
-				<div class="btn cyan lighten-1">
-					<span>文件</span>
-					<input type="file">
-				</div>
-				<div class="file-path-wrapper">
-					<input class="file-path validate" type="text">
-				</div>
+			<div id="uploader-demo">
+				<!--用来存放item-->
+				<div id="fileList" class="uploader-list"></div>
+				<div id="filePicker">选择图片</div>
 			</div>
+
 			<button id="submit" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">提交
     			<i class="material-icons right">send</i>
   			</button>
@@ -84,6 +79,210 @@
 			</div>
 		</div>
 	</body>
+	<script type="text/javascript" src="../resources/js/webuploader/webuploader.js"></script>
 	<script type="text/javascript" src="../resources/js/project/categorySetting.js"></script>
+	<script type="text/javascript">
+		var accessid = '';
+		var accesskey = '';
+		var host = '';
+		var policyBase64 = '';
+		var signature = '';
+		var callbackbody = '';
+		var filename = '';
+		var key = '';
+		var expire = 0;
+		var g_object_name = '';
+		var now = timestamp = Date.parse(new Date()) / 1000;
+
+		var progressbar = $("#progressbar");
+
+		function send_request() {
+			var xmlhttp = null;
+			if(window.XMLHttpRequest) {
+				xmlhttp = new XMLHttpRequest();
+			} else if(window.ActiveXObject) {
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+
+			if(xmlhttp != null) {
+				serverUrl = 'uploadKey'
+				xmlhttp.open("GET", serverUrl, false);
+				xmlhttp.send(null);
+				return xmlhttp.responseText
+			} else {
+				alert("Your browser does not support XMLHTTP.");
+			}
+		};
+
+		function get_signature() {
+			//可以判断当前expire是否超过了当前时间,如果超过了当前时间,就重新取一下.3s 做为缓冲
+			now = timestamp = Date.parse(new Date()) / 1000;
+			if(expire < now + 3) {
+				body = send_request()
+				var obj = eval("(" + body + ")");
+				host = obj['host']
+				policyBase64 = obj['policy']
+				accessid = obj['accessid']
+				signature = obj['signature']
+				expire = parseInt(obj['expire'])
+				callbackbody = obj['callback']
+				key = obj['dir']
+				return true;
+			}
+			return false;
+		};
+
+		function random_string(len) {
+			len = len || 32;
+			var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+			var maxPos = chars.length;
+			var pwd = '';
+			for(i = 0; i < len; i++) {
+				pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+			}
+			return pwd;
+		}
+
+		function get_suffix(filename) {
+			pos = filename.lastIndexOf('.')
+			suffix = ''
+			if(pos != -1) {
+				suffix = filename.substring(pos)
+			}
+			return suffix;
+		}
+
+		function calculate_object_name(filename) {
+
+			suffix = get_suffix(filename)
+			g_object_name = key + random_string(10) + suffix
+
+		}
+
+		function get_uploaded_object_name(filename) {
+			return g_object_name;
+		}
+
+		function set_upload_param(up, filename, ret) {
+			if(ret == false) {
+				ret = get_signature()
+			}
+			g_object_name = key;
+			if(filename != '') {
+				suffix = get_suffix(filename)
+				calculate_object_name(filename)
+			}
+			new_multipart_params = {
+				'key': g_object_name,
+				'policy': policyBase64,
+				'OSSAccessKeyId': accessid,
+				'success_action_status': '200', //让服务端返回200,不然，默认会返回204
+				'callback': callbackbody,
+				'signature': signature,
+			};
+
+			up.option({
+				'url': host,
+				'multipart_params': new_multipart_params
+			});
+
+		}
+
+		jQuery(function() {
+
+			var $list = $("#fileList");
+			var uploader = WebUploader.create({
+
+				// 选完文件后，是否自动上传。
+				auto: true,
+
+				// swf文件路径
+				swf: '../resources/js/webuploaders/Uploader.swf',
+
+				// 文件接收服务端。
+				server: 'http://webuploader.duapp.com/server/fileupload.php',
+
+				// 选择文件的按钮。可选。
+				// 内部根据当前运行是创建，可能是input元素，也可能是flash.
+				pick: '#filePicker',
+
+				// 只允许选择图片文件。
+				accept: {
+					title: 'Images',
+					extensions: 'gif,jpg,jpeg,bmp,png',
+					mimeTypes: 'image/*'
+				}
+			});
+
+			uploader.on('startUpload', function() {
+				console.log('startUpload');
+				set_upload_param(uploader, '', false);
+			});
+			// 当有文件添加进来的时候
+			uploader.on('fileQueued', function(file) {
+				var $li = $(
+						'<div id="' + file.id + '" class="file-item thumbnail">' +
+						'<img>' +
+						'<div class="info">' + file.name + '</div>' +
+						'</div>'
+					),
+					$img = $li.find('img');
+
+				// $list为容器jQuery实例
+				$list.append($li);
+
+				// 创建缩略图
+				// 如果为非图片文件，可以不用调用此方法。
+				// thumbnailWidth x thumbnailHeight 为 100 x 100
+				uploader.makeThumb(file, function(error, src) {
+					if(error) {
+						$img.replaceWith('<span>不能预览</span>');
+						return;
+					}
+
+					$img.attr('src', src);
+				}, '100px', '100px');
+				
+				set_upload_param(up, file.name, true);
+			});
+
+			uploader.on('uploadProgress', function(file, percentage) {
+				var $li = $('#' + file.id),
+					$percent = $li.find('.progress span');
+
+				// 避免重复创建
+				if(!$percent.length) {
+					$percent = $('<p class="progress"><span></span></p>')
+						.appendTo($li)
+						.find('span');
+				}
+
+				$percent.css('width', percentage * 100 + '%');
+			});
+
+			// 文件上传成功，给item添加成功class, 用样式标记上传成功。
+			uploader.on('uploadSuccess', function(file) {
+				$('#' + file.id).addClass('upload-state-done');
+			});
+
+			// 文件上传失败，显示上传出错。
+			uploader.on('uploadError', function(file) {
+				var $li = $('#' + file.id),
+					$error = $li.find('div.error');
+
+				// 避免重复创建
+				if(!$error.length) {
+					$error = $('<div class="error"></div>').appendTo($li);
+				}
+
+				$error.text('上传失败');
+			});
+
+			// 完成上传完了，成功或者失败，先删除进度条。
+			uploader.on('uploadComplete', function(file) {
+				$('#' + file.id).find('.progress').remove();
+			});
+		});
+	</script>
 
 </html>

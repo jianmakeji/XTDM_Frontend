@@ -28,6 +28,8 @@ var vum = new Vue({
 		$("#addPanel").hide();
 	});
 
+	var bgImgUrl = "";
+	
 	$("#submit").click(function() {
 		let title = $("#title").val();
 		let describe = $("#describe").val();
@@ -42,7 +44,8 @@ var vum = new Vue({
 			return;
 		}
 
-		let data = {"title":title,"describe":describe};
+
+		let data = {"name":title,"describe":describe,"bgImgUrl":bgImgUrl};
 		
 		$.ajax({
 
