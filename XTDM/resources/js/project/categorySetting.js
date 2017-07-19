@@ -1,11 +1,58 @@
+var picUrl = "";
+var showCategory = 0;
+
 var vum = new Vue({
 	el: '#dataTable',
 	data: {
 		datas: ""
-	}
-});
+	},
+	methods: {
+		updateData: function(e) {
+			let id = e.currentTarget.id;
+			vum.datas.forEach(function(musicObj) {
+				if(musicObj.id == id) {
+					$("#title").val(musicObj.name);
+					$("#describe").val(musicObj.describe);
 
-var picUrl = "";
+					if(showMusicPanel == 0) {
+						showMusicPanel = 1;
+						$("#addPanel").show('slow');
+					} else {
+						showMusicPanel = 0;
+						$("#addPanel").hide();
+					}
+					
+				}
+			});
+		},
+		deleteData:function(e){
+			let id = e.currentTarget.id;
+			
+			$.ajax({
+
+				type: "POST",
+				url: "",
+				dataType: "json",
+				data: data,
+				beforeSend: function() {
+					$("#circleProgress").show();
+				},
+				success: function(msg) {
+					$("#circleProgress").hide();
+					resetPanel();
+				},
+				statusCode: {
+					404: function() {
+						alert('page not found');
+					},
+					500: function() {
+
+					}
+				}
+			});
+		}
+	},
+});
 
 var uploader = new plupload.Uploader({
 	runtimes: 'html5,flash,silverlight,html4',
@@ -96,13 +143,13 @@ function resetPanel() {
 (function() {
 
 	$(".progress").hide();
-
+	
+	
 	$.getJSON("../resources/category.json", function(data) {
 
 		vum.datas = data;
 	});
 
-	var showCategory = 0;
 	$("#addCategory").click(function() {
 		if(showCategory == 0) {
 			showCategory = 1;

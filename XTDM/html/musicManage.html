@@ -26,12 +26,12 @@
 							<th>操作</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="tableBody">
 						<tr v-for="value in datas">
 							<td>{{value.name}}</td>
 							<td>{{value.author}}</td>
 							<td>{{value.date}}</td>
-							<td>修改 删除</td>
+							<td><a href="#" :id="value.id" @click="updateData($event)">修改</a> <a href="#" :id="value.id" @click="deleteData($event)">删除</a></td>
 						</tr>
 					</tbody>
 					<tfoot>
@@ -66,25 +66,32 @@
 			<div class="row">
 				<div class="input-field col s12">
 					<i class="small material-icons prefix">subtitles</i>
-					<input id="describe" type="text" class="validate">
-					<label for="describe">作者</label>
+					<input id="author" type="text" class="validate">
+					<label for="author">作者</label>
 				</div>
 			</div>
 
 			<div id="filePanel">
+				<p>请上传MP3文件：</p>
 				<div><b id="fileDescribe"><span id="fileCompletePersent"></span></b>
 					<div class="progress">
 						<div class="determinate" style="width: 1%"></div>
 					</div>
 				</div>
 				<div id="container">
-					<a id="selectfiles" href="javascript:void(0);" class='btn'>选择文件</a>
+					<a id="selectfiles" href="javascript:void(0);" class='btn waves-effect waves-light cyan lighten-1'>选择文件</a>
 				</div>
 
 				<pre id="console"></pre>
 				<p>&nbsp;</p>
 			</div>
 
+			<div id="videoPanel">
+				<audio id="bgMusic" src="" controls loop>
+				</audio>
+				<button id="updateMusic" class="btn waves-effect waves-light cyan lighten-1">修改音乐</button>
+			</div>
+			
 			<button id="submit" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">提交
     			<i class="material-icons right">send</i>
   			</button>
