@@ -54,12 +54,17 @@
 #imagePanel img{
 	width: 25%;
 	height: auto;
-	float: left;
+	display: inline-block;
+	max-width: 150px;
 }
 
 #operateImg{
 	width: 50%;
 	height: auto;
 	margin-left: 10%;
-	float: right;
+	display: inline-block;
+}
+
+#imagePanel p{
+	margin-left: 15px;
 }

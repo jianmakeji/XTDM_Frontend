@@ -15,7 +15,7 @@
 				<input id="condition" type="text" class="validate">
 				<label for="condition">搜索</label>
 			</div>
-			
+
 			<div id="dataTable">
 				<table class="striped centered">
 					<thead>
@@ -54,7 +54,7 @@
 				</ul>
 			</div>
 		</section>
-		
+
 		<section id="addPanel">
 			<div class="row">
 				<div class="input-field col s12">
@@ -70,25 +70,31 @@
 					<label for="describe">作者</label>
 				</div>
 			</div>
-			
-			<div class="file-field input-field">
 
-				<div class="btn cyan lighten-1">
-					<span>文件</span>
-					<input type="file">
+			<div id="filePanel">
+				<div><b id="fileDescribe"><span id="fileCompletePersent"></span></b>
+					<div class="progress">
+						<div class="determinate" style="width: 1%"></div>
+					</div>
 				</div>
-				<div class="file-path-wrapper">
-					<input class="file-path validate" type="text">
+				<div id="container">
+					<a id="selectfiles" href="javascript:void(0);" class='btn'>选择文件</a>
 				</div>
+
+				<pre id="console"></pre>
+				<p>&nbsp;</p>
 			</div>
+
 			<button id="submit" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">提交
     			<i class="material-icons right">send</i>
   			</button>
-  			<button id="cancel" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">取消
+			<button id="cancel" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">取消
     			<i class="material-icons right">replay</i>
   			</button>
 		</section>
 	</body>
+	<script type="text/javascript" src="../resources/js/plupload-2.3.1/plupload.full.min.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="../resources/js/project/ossupload.js"></script>
 	<script type="text/javascript" src="../resources/js/project/music.js"></script>
-	
+
 </html>
