@@ -1,4 +1,6 @@
 var showMusicPanel = 0;
+var insertOrUpdate = 0;
+var updateId = 0;
 
 var vum = new Vue({
 	el: '#dataTable',
@@ -11,13 +13,14 @@ var vum = new Vue({
 	methods: {
 		updateData: function(e) {
 
-			let id = e.currentTarget.id;
-			
+			updateId = e.currentTarget.id;
+			insertOrUpdate = 1;
 			vum.datas.forEach(function(musicObj) {
-				if(musicObj.id == id) {
+				if(musicObj.id == updateId) {
 					$("#title").val(musicObj.name);
+					$("#musicLabel").addClass('active');
 					$("#author").val(musicObj.author);
-
+					$("#authorLabel").addClass('active');
 					if(showMusicPanel == 0) {
 						showMusicPanel = 1;
 						$("#addPanel").show('slow');
@@ -26,7 +29,7 @@ var vum = new Vue({
 						$("#addPanel").hide();
 					}
 
-					if(musicObj.url != undefined && musicObj.url != '') {
+					if(musicObj.url) {
 						$("#filePanel").hide();
 						$("#videoPanel").show();
 					}
@@ -147,6 +150,9 @@ function resetPanel() {
 	$("#fileDescribe").html('');
 	$("#fileCompletePersent").html('');
 	$(".progress").hide();
+	$("#titleLabel").removeClass('active');
+	$("#authorLabel").removeClass('active');
+	insertOrUpdate = 0;
 }
 
 (function() {
@@ -165,6 +171,7 @@ function resetPanel() {
 	});
 
 	$("#addMusic").click(function() {
+		insertOrUpdate = 0;
 		if(showMusicPanel == 0) {
 			showMusicPanel = 1;
 			$("#addPanel").show('slow');
@@ -204,22 +211,45 @@ function resetPanel() {
 			return;
 		}
 
-		let data = {
+		let requestData = {
 			"name": title,
 			"author": author,
 			"url": mp3Url
 		};
+
+		if(insertOrUpdate == 0) {
+			//写入数据
+			requestData.push({
+				'id',
+				updateId
+			});
+		} else if(insertOrUpdate == 1) {
+			//插入数据
+
+		}
 
 		$.ajax({
 
 			type: "POST",
 			url: "",
 			dataType: "json",
-			data: data,
+			data: requestData,
 			beforeSend: function() {
 				$("#circleProgress").show();
 			},
 			success: function(msg) {
+				if(insertOrUpdate == 0) {
+					//插入数据
+					vum.datas.push(requestData);
+				} else if(insertOrUpdate == 1) {
+					vum.datas.forEach(function(musicObj) {
+						if(musicObj.id == updateId) {
+							musicObj.name = title;
+							musicObj.author = author;
+							musicObj.url = mp3Url;
+						}
+					});
+				}
 				$("#circleProgress").hide();
 				resetPanel();
 			},

@@ -1,14 +1,18 @@
 [
 	{
+		"id":"1",
 		"name": "人文",
 		"describe": "Eclair"
 	}, {
+		"id":"2",
 		"name": "物语",
 		"describe": "Jellybean"
 	}, {
+		"id":"3",
 		"name": "风景",
 		"describe": "Lollipop"
 	},{
+		"id":"4",
 		"name": "社区",
 		"describe": "Eclair"
 	}
