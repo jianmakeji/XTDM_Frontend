@@ -47,6 +47,6 @@ section p {
 	float: right;
 }
 
-.active{
+.pagination .active{
 	background-color: #26c6da !important;
 }
