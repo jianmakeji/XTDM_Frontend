@@ -53,15 +53,15 @@
 				</table>
 
 				<ul class="pagination pageBlock">
-					<li class="disabled">
+					<li id="chevron_left" class="disabled" @click="prePageClick($event)">
 						<a href="#!"><i class="material-icons">chevron_left</i></a>
 					</li>
 
-					<li v-for="n in pageCount">
-						<a href="javascript:void(0)" v-bind:class=" activeNumber === n ? 'active' : 'waves-effect'">{{ n }}</a>
+					<li v-for="n in currentPaginationCount" v-bind:class="activeNumber === (n + paginationNum * 10) ? 'active' : 'waves-effect'" @click="getPageData($event)" :id="n + paginationNum * 10">
+						<a href="javascript:void(0)">{{ n + paginationNum * 10  }}</a>
 					</li>
 
-					<li class="waves-effect">
+					<li id="chevron_right" class="waves-effect" @click="nextPageClick($event)">
 						<a href="#!"><i class="material-icons">chevron_right</i></a>
 					</li>
 				</ul>

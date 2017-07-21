@@ -1,19 +1,19 @@
 var showMusicPanel = 0;
-var insertOrUpdate = 0;
-var updateId = 0;
-var prePage = 1;
+var insertOrUpdate = 0;//插入或更新标志
+var updateId = 0; //更新记录的ID
+var prePage = 1;//前一页，用于css修改点击样式
 var currentPage = 0; //当前页码
 
 var vum = new Vue({
 	el: '#dataTable',
 	data: {
 		datas: "",
-		pageNum: "",
-		activeNumber: 1,
-		dataLength: 0,
-		paginationNum:0,
-		currentPaginationCount:10,
-		paginationCount:0,
+		pageNum: "", //数据总共分为多少页
+		activeNumber: 1, //当前显示页的ID
+		dataLength: 0, //总数据长度
+		paginationNum:0, //当前处在第几块分页
+		currentPaginationCount:10, //记录当前分页块总共有多少页
+		paginationCount:0 //记录有多少分页块
 	},
 	methods: {
 		updateData: function(e) {
@@ -205,10 +205,10 @@ function resetPanel() {
 		var pageNum = Math.ceil(data.length / 10);
 		
 		if(pageNum > 10) {
-			currentPaginationCount = 10;
+			vum.currentPaginationCount = 10;
 		}
 		else{
-			currentPaginationCount = pageNum;
+			vum.currentPaginationCount = pageNum;
 		}
 		
 		vum.dataLength = data.length;

@@ -1,3 +1,6 @@
+var prePage = 1;//前一页，用于css修改点击样式
+var currentPage = 0; //当前页码
+
 var app = new Vue({
 	el: '#dropdown',
 	data: {
@@ -31,13 +34,50 @@ var vum = new Vue({
 		datas: "",
 		pageNum: "",
 		activeNumber: 1,
-		pageCount: 10
+		dataLength: 0, //总数据长度
+		paginationNum:0, //当前处在第几块分页
+		currentPaginationCount:10, //记录当前分页块总共有多少页
+		paginationCount:0 //记录有多少分页块
 	},
 	methods: {
 		showData: function() {
 			$.getJSON("../resources/table.json", function(data) {
 				vum.datas = data;
 			});
+		},
+		getPageData:function(e){
+			$(".pagination").find('li[id='+prePage+']').removeClass('active').addClass('waves-effect');
+			let id = e.currentTarget.id;
+			this.activeNumber = id;
+			$(".pagination").find('li[id='+id+']').addClass('active');
+			prePage = id;
+			
+			$.getJSON("../resources/table.json", {offset:id*10,limit:10}, function(data) {
+				
+				vum.datas = data.slice((id - 1) * 10, (id - 1) * 10 + 10);
+				
+			});
+	
+		},
+		prePageClick:function(e){
+			vum.paginationNum = vum.paginationNum - 1;
+			if (vum.paginationNum === 0){
+				$("#chevron_left").hide();
+			}
+			$("#chevron_right").show();
+			vum.currentPaginationCount = 10;
+		},
+		nextPageClick:function(e){
+			$("#chevron_left").show();
+			vum.paginationNum = vum.paginationNum + 1;
+			
+			if (vum.paginationNum === (vum.paginationCount - 1)){
+				$("#chevron_right").hide();
+				vum.currentPaginationCount = Math.ceil((vum.dataLength - vum.paginationNum * 10 * 10)/10);
+			}
+			else{
+				vum.currentPaginationCount = 10;
+			}
 		}
 	}
 });
@@ -47,13 +87,25 @@ var vum = new Vue({
 
 	var currentPage = 0;
 
-	$.getJSON("../resources/table.json", function(data) {
-		var pageNum = data.length / 10;
-		if(data.length % 10 != 0) {
-			pageNum = pageNum + 1;
+	$.getJSON("../resources/table.json", {offset:0,limit:10}, function(data) {
+		var pageNum = Math.ceil(data.length / 10);
+		
+		if(pageNum > 10) {
+			vum.currentPaginationCount = 10;
 		}
+		else{
+			vum.currentPaginationCount = pageNum;
+		}
+		
+		vum.dataLength = data.length;
 		vum.datas = data.slice(currentPage * 10, currentPage * 10 + 10);
 		vum.pageNum = pageNum;
+		vum.paginationCount = Math.ceil(pageNum / 10);
+		
+		if (pageNum <= 10){
+			$("#chevron_right").hide();
+			$("#chevron_left").hide();
+		}
 	});
 
 	$("#addArticleContent").click(function() {
