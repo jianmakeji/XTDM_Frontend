@@ -38,7 +38,7 @@ var vum = new Vue({
 			$.ajax({
 
 				type: "POST",
-				url: "",
+				url: "../category/delete/"+id,
 				dataType: "json",
 				data: data,
 				beforeSend: function() {
@@ -160,12 +160,12 @@ function resetPanel() {
 (function() {
 
 	$(".progress").hide();
-
-	$.getJSON("../resources/category.json", function(data) {
-
+	
+	$.getJSON("../category/getCategoryByPage",{offset:0,limit:1000}, function(data) {
 		vum.datas = data;
 	});
-
+	
+	
 	$("#addCategory").click(function() {
 		var insertOrUpdate = 0;
 		if(showCategory == 0) {
@@ -199,21 +199,25 @@ function resetPanel() {
 			"bgImgUrl": bgImgUrl
 		};
 
+		var requestUrl = "";
+		
 		if(insertOrUpdate == 0) {
-			//写入数据
+			//插入数据
+			requestUrl = "../category/create";
+		} else if(insertOrUpdate == 1) {
+			
+			//更新数据
 			data.push({
-				'id',
+				'id':
 				updateId
 			});
-		} else if(insertOrUpdate == 1) {
-			//插入数据
-
+			requestUrl = "../category/update";
 		}
 
 		$.ajax({
 
 			type: "POST",
-			url: "some.php",
+			url: requestUrl,
 			dataType: "json",
 			data: data,
 			beforeSend: function() {

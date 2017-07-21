@@ -1,6 +1,8 @@
 var showMusicPanel = 0;
 var insertOrUpdate = 0;
 var updateId = 0;
+var prePage = 1;
+var currentPage = 0; //当前页码
 
 var vum = new Vue({
 	el: '#dataTable',
@@ -8,7 +10,10 @@ var vum = new Vue({
 		datas: "",
 		pageNum: "",
 		activeNumber: 1,
-		pageCount: 10
+		dataLength: 0,
+		paginationNum:0,
+		currentPaginationCount:10,
+		paginationCount:0,
 	},
 	methods: {
 		updateData: function(e) {
@@ -43,7 +48,7 @@ var vum = new Vue({
 			$.ajax({
 
 				type: "POST",
-				url: "",
+				url: "/music/delete/"+id,
 				dataType: "json",
 				data: data,
 				beforeSend: function() {
@@ -62,6 +67,42 @@ var vum = new Vue({
 					}
 				}
 			});
+		},
+		getPageData:function(e){
+			//$('li[id='+prePage+']').removeClass('active').addClass('waves-effect');
+			$(".pagination").find('li[id='+prePage+']').removeClass('active').addClass('waves-effect');
+			let id = e.currentTarget.id;
+			this.activeNumber = id;
+			//$('li[id='+id+']').addClass('active');
+			$(".pagination").find('li[id='+id+']').addClass('active');
+			prePage = id;
+			
+			$.getJSON("../resources/music.json", {offset:id*10,limit:10}, function(data) {
+				
+				vum.datas = data.slice((id - 1) * 10, (id - 1) * 10 + 10);
+				
+			});
+	
+		},
+		prePageClick:function(e){
+			vum.paginationNum = vum.paginationNum - 1;
+			if (vum.paginationNum === 0){
+				$("#chevron_left").hide();
+			}
+			$("#chevron_right").show();
+			vum.currentPaginationCount = 10;
+		},
+		nextPageClick:function(e){
+			$("#chevron_left").show();
+			vum.paginationNum = vum.paginationNum + 1;
+			
+			if (vum.paginationNum === (vum.paginationCount - 1)){
+				$("#chevron_right").hide();
+				vum.currentPaginationCount = Math.ceil((vum.dataLength - vum.paginationNum * 10 * 10)/10);
+			}
+			else{
+				vum.currentPaginationCount = 10;
+			}
 		}
 	}
 
@@ -158,16 +199,27 @@ function resetPanel() {
 (function() {
 
 	$("#videoPanel").hide();
-	var currentPage = 0;
-
-	$.getJSON("../resources/music.json", function(data) {
-		var pageNum = data.length / 10;
-		if(data.length % 10 != 0) {
-			pageNum = pageNum + 1;
+	$("#chevron_left").hide();
+	
+	$.getJSON("../resources/music.json", {offset:0,limit:10}, function(data) {
+		var pageNum = Math.ceil(data.length / 10);
+		
+		if(pageNum > 10) {
+			currentPaginationCount = 10;
 		}
+		else{
+			currentPaginationCount = pageNum;
+		}
+		
+		vum.dataLength = data.length;
 		vum.datas = data.slice(currentPage * 10, currentPage * 10 + 10);
 		vum.pageNum = pageNum;
-
+		vum.paginationCount = Math.ceil(pageNum / 10);
+		
+		if (pageNum <= 10){
+			$("#chevron_right").hide();
+			$("#chevron_left").hide();
+		}
 	});
 
 	$("#addMusic").click(function() {
@@ -217,21 +269,25 @@ function resetPanel() {
 			"url": mp3Url
 		};
 
+		var requestUrl = "";
+		
 		if(insertOrUpdate == 0) {
 			//写入数据
+			
+			requestUrl = "../category/create";
+		} else if(insertOrUpdate == 1) {
+			//更新数据
 			requestData.push({
-				'id',
+				'id':
 				updateId
 			});
-		} else if(insertOrUpdate == 1) {
-			//插入数据
-
+			requestUrl = "../category/update";
 		}
 
 		$.ajax({
 
 			type: "POST",
-			url: "",
+			url: requestUrl,
 			dataType: "json",
 			data: requestData,
 			beforeSend: function() {
