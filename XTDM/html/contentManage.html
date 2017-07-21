@@ -8,22 +8,21 @@
 	</head>
 
 	<body>
-
 		<section>
 			<p id="breadcrumbs">内容管理</p><span id="categoryId"></span>
 			<a id="addArticleContent" class="waves-effect waves-light btn cyan lighten-1"><i class="material-icons left">playlist_add</i>上传文章</a>
 			<a id="addPptContent" class="waves-effect waves-light btn cyan lighten-1"><i class="material-icons left">playlist_add</i>上传幻灯片</a>
 			<div id="conditionPanel">
 				<div id="dropdown" class="input-field">
-					<select>
-						<option value="" disabled selected>请选择</option>
-						<option v-for="menu in menus" :value="menu.id">{{menu.name}}</option>
+					<select v-model="selected">
+						<option value="" disabled>请选择</option>
+						<option v-for="menu in menus" v-bind:value="menu.id">{{menu.name}}</option>
 					</select>
 					<label>选择文章类别</label>
 				</div>
 				<div class="input-field search">
 					<i class="material-icons prefix">search</i>
-					<input id="condition" type="text" class="validate"> 
+					<input id="condition" type="text" class="validate">
 					<label for="condition">搜索</label>
 				</div>
 
@@ -58,7 +57,7 @@
 					</li>
 
 					<li v-for="n in currentPaginationCount" v-bind:class="activeNumber === (n + paginationNum * 10) ? 'active' : 'waves-effect'" @click="getPageData($event)" :id="n + paginationNum * 10">
-						<a href="javascript:void(0)">{{ n + paginationNum * 10  }}</a>
+						<a href="javascript:void(0)">{{ n + paginationNum * 10 }}</a>
 					</li>
 
 					<li id="chevron_right" class="waves-effect" @click="nextPageClick($event)">

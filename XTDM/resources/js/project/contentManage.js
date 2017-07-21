@@ -4,6 +4,7 @@ var currentPage = 0; //当前页码
 var app = new Vue({
 	el: '#dropdown',
 	data: {
+		selected: '',
 		menus: [{
 			'id': '1',
 			'name': '人文'
@@ -83,7 +84,7 @@ var vum = new Vue({
 });
 
 (function() {
-	$('select').material_select();
+	//$('select').material_select();
 
 	var currentPage = 0;
 
