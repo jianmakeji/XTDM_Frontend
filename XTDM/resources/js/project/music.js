@@ -147,7 +147,6 @@ var uploader = new plupload.Uploader({
 		},
 
 		BeforeUpload: function(up, file) {
-
 			set_upload_param(up, file.name, true);
 		},
 
