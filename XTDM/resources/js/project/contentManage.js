@@ -96,8 +96,41 @@ var vum = new Vue({
 	}
 });
 
-(function() {
+function searchResult() {
+	var keyword = $("#condition").val();
+	var data = {
+		'offset': 0,
+		'limit': '10'
+	};
+	$.ajax({
 
+		type: "POST",
+		url: "../article/getArticleKeywordByPage",
+		dataType: "json",
+		data: data,
+		beforeSend: function() {
+			$("#circleProgress").show();
+		},
+		success: function(msg) {
+			//将数据通过vue.js更新到数据列表
+
+			vum.datas.push(requestData);
+
+			$("#circleProgress").hide();
+		},
+		statusCode: {
+			404: function() {
+				alert('page not found');
+			},
+			500: function() {
+
+			}
+		}
+	});
+}
+
+(function() {
+	
 	var currentPage = 0;
 
 	$.getJSON("../resources/table.json", {
@@ -141,6 +174,18 @@ var vum = new Vue({
 		$("#managePanel").empty();
 		$("#managePanel").load("addContent.html");
 		$("#addContentSign").html("1");
+	});
+
+	//回车进行搜索查询
+	$("#condition").keydown(function(event) {
+		if(event.keyCode == 13) {
+			searchResult();
+		}
+	});
+
+	//点击搜索图标进行查询
+	$("#searchIcon").click(function() {
+		searchResult();
 	});
 
 })();

@@ -21,7 +21,7 @@
 					<label>选择文章类别{{selected}}</label>
 				</div>
 				<div class="input-field search">
-					<i class="material-icons prefix">search</i>
+					<i id="searchIcon" class="material-icons prefix">search</i>
 					<input id="condition" type="text" class="validate">
 					<label for="condition">搜索</label>
 				</div>
@@ -66,6 +66,20 @@
 				</ul>
 			</div>
 		</section>
+		
+		<div id="circleProgress" class="preloader-wrapper big active">
+			<div class="spinner-layer spinner-green-only">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+		</div>
 	</body>
 	<script type="text/javascript" src="../resources/js/project/contentManage.js"></script>
 

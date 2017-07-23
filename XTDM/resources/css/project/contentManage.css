@@ -50,3 +50,14 @@ section p {
 .pagination .active{
 	background-color: #26c6da !important;
 }
+
+#searchIcon:hover{
+	cursor: pointer;
+}
+
+#circleProgress{
+	position: absolute;
+	top: calc(50% + 100px);
+	left: calc(50% - 20px);
+	display: none;
+}
