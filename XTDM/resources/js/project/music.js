@@ -2,7 +2,7 @@ var showMusicPanel = 0;
 var insertOrUpdate = 0;//插入或更新标志
 var updateId = 0; //更新记录的ID
 var prePage = 1;//前一页，用于css修改点击样式
-var currentPage = 0; //当前页码
+var currentPage = 1; //当前页码
 
 var vum = new Vue({
 	el: '#dataTable',
@@ -45,7 +45,7 @@ var vum = new Vue({
 		deleteData: function(e) {
 			let id = e.currentTarget.id;
 
-			$.ajax({
+			var deleteRequest = $.ajax({
 
 				type: "POST",
 				url: "/music/delete/"+id,
@@ -53,34 +53,35 @@ var vum = new Vue({
 				data: data,
 				beforeSend: function() {
 					$("#circleProgress").show();
-				},
-				success: function(msg) {
-					$("#circleProgress").hide();
-					resetPanel();
-				},
-				statusCode: {
-					404: function() {
-						alert('page not found');
-					},
-					500: function() {
-
-					}
 				}
+				
+			});
+			
+			var promise = deleteRequest.then(function(data){
+				var loadCurrentPageData = $.getJSON("../music/getMusicByPage", {offset:currentPage*10,limit:10}, function(data) {
+					vum.datas = data.object.list;
+				});
+				return loadCurrentPageData;
+			})
+			
+			promise.done(function(data){
+				$("#circleProgress").hide();
 			});
 		},
 		getPageData:function(e){
 			//$('li[id='+prePage+']').removeClass('active').addClass('waves-effect');
 			$(".pagination").find('li[id='+prePage+']').removeClass('active').addClass('waves-effect');
 			let id = e.currentTarget.id;
+			currentPage = id;
 			this.activeNumber = id;
 			//$('li[id='+id+']').addClass('active');
 			$(".pagination").find('li[id='+id+']').addClass('active');
 			prePage = id;
 			
-			$.getJSON("../resources/music.json", {offset:id*10,limit:10}, function(data) {
+			$.getJSON("../music/getMusicByPage", {offset:id*10,limit:10}, function(data) {
 				
-				vum.datas = data.slice((id - 1) * 10, (id - 1) * 10 + 10);
-				
+				//vum.datas = data.slice((id - 1) * 10, (id - 1) * 10 + 10);
+				vum.datas = data.object.list;
 			});
 	
 		},
@@ -159,7 +160,7 @@ var uploader = new plupload.Uploader({
 		FileUploaded: function(up, file, info) {
 			if(info.status == 200) {
 				$("#fileDescribe").innerHTML = '，上传成功！';
-				mp3Url = host + "/" + get_uploaded_object_name(file.name) + "?x-oss-process=style/thumb-150";
+				mp3Url = host + "/" + get_uploaded_object_name(file.name);
 
 			} else {
 				$("#fileDescribe").innerHTML = info.response;
@@ -194,6 +195,7 @@ function resetPanel() {
 	$("#titleLabel").removeClass('active');
 	$("#authorLabel").removeClass('active');
 	insertOrUpdate = 0;
+	showCategory = 0;
 }
 
 (function() {
@@ -201,8 +203,8 @@ function resetPanel() {
 	$("#videoPanel").hide();
 	$("#chevron_left").hide();
 	
-	$.getJSON("../resources/music.json", {offset:0,limit:10}, function(data) {
-		var pageNum = Math.ceil(data.length / 10);
+	$.getJSON("../music/getMusicByPage", {offset:0,limit:10}, function(data) {
+		var pageNum = Math.ceil(data.object.count / 10);
 		
 		if(pageNum > 10) {
 			vum.currentPaginationCount = 10;
@@ -211,8 +213,9 @@ function resetPanel() {
 			vum.currentPaginationCount = pageNum;
 		}
 		
-		vum.dataLength = data.length;
-		vum.datas = data.slice(currentPage * 10, currentPage * 10 + 10);
+		vum.dataLength = data.object.count;
+		//vum.datas = data.slice(currentPage * 10, currentPage * 10 + 10);
+		vum.datas = data.object.list;
 		vum.pageNum = pageNum;
 		vum.paginationCount = Math.ceil(pageNum / 10);
 		
@@ -242,6 +245,7 @@ function resetPanel() {
 		showMusicPanel = 0;
 		resetPanel();
 		$("#addPanel").hide();
+		$("#circleProgress").hide();
 	});
 
 	$("#submit").click(function() {
@@ -272,30 +276,31 @@ function resetPanel() {
 		var requestUrl = "";
 		
 		if(insertOrUpdate == 0) {
-			//写入数据
-			
-			requestUrl = "../category/create";
+			//插入数据
+			requestUrl = "../music/create";
 		} else if(insertOrUpdate == 1) {
+			
 			//更新数据
-			requestData.push({
-				'id':
-				updateId
-			});
-			requestUrl = "../category/update";
+			requestData.id = updateId;
+			requestUrl = "../music/update";
 		}
 
 		$.ajax({
 
 			type: "POST",
 			url: requestUrl,
+			contentType : 'application/json',
 			dataType: "json",
-			data: requestData,
+			data: JSON.stringify(requestData),
 			beforeSend: function() {
 				$("#circleProgress").show();
 			},
-			success: function(msg) {
+			success: function(data) {
 				if(insertOrUpdate == 0) {
 					//插入数据
+					requestData.id = data.object;
+					var dateTime = new Date();
+					requestData.createTime = dateTime.toLocaleDateString();
 					vum.datas.push(requestData);
 				} else if(insertOrUpdate == 1) {
 					vum.datas.forEach(function(musicObj) {
@@ -307,6 +312,7 @@ function resetPanel() {
 					});
 				}
 				$("#circleProgress").hide();
+				$("#addPanel").hide();
 				resetPanel();
 			},
 			statusCode: {

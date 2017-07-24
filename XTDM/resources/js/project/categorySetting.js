@@ -49,10 +49,13 @@ var vum = new Vue({
 				success: function(msg) {
 					var i = 0;
 					vum.datas.forEach(function(categoryObj) {
-						i = i + 1;
+						
+						console.log(i);
 						if(categoryObj.id == id) {
+							console.log(categoryObj.id);
 							vum.datas.splice(i, 1);
 						}
+						i = i + 1;
 					});
 					
 					$("#circleProgress").hide();
@@ -157,7 +160,8 @@ function resetPanel() {
 	$(".progress").hide();
 	$("#titleLabel").removeClass('active');
 	$("#describeLabel").removeClass('active');
-	var insertOrUpdate = 0;
+	insertOrUpdate = 0;
+	showCategory = 0;
 }
 
 (function() {
@@ -214,7 +218,6 @@ function resetPanel() {
 			requestUrl = "../category/update";
 		}
 		
-		console.log(requestData);
 
 		$.ajax({
 
@@ -226,11 +229,13 @@ function resetPanel() {
 			beforeSend: function() {
 				$("#circleProgress").show();
 			},
-			success: function(msg) {
+			success: function(data) {
 				//将数据通过vue.js更新到数据列表
 				if(insertOrUpdate == 0) {
 					//插入数据
+					requestData.id = data.object;
 					vum.datas.push(requestData);
+					
 				} else if(insertOrUpdate == 1) {
 					vum.datas.forEach(function(categoryObj) {
 						if(categoryObj.id == updateId) {

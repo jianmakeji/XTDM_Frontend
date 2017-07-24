@@ -11,9 +11,7 @@
 		<section>
 			<a id="addMusic" class="waves-effect waves-light btn cyan lighten-1"><i class="material-icons left">playlist_add</i>上传音乐</a>
 			<div class="input-field search">
-				<i class="material-icons prefix">search</i>
-				<input id="condition" type="text" class="validate">
-				<label for="condition">搜索</label>
+				<i class="material-icons prefix">search</i> <input id="condition" type="text" class="validate"> <label for="condition">搜索</label>
 			</div>
 
 			<div id="dataTable">
@@ -30,8 +28,11 @@
 						<tr v-for="value in datas">
 							<td>{{value.name}}</td>
 							<td>{{value.author}}</td>
-							<td>{{value.date}}</td>
-							<td><a href="#" :id="value.id" @click="updateData($event)">修改</a> <a href="#" :id="value.id" @click="deleteData($event)">删除</a></td>
+							<td>{{value.createTime}}</td>
+							<td>
+								<a href="#" :id="value.id" @click="updateData($event)">修改</a>
+								<a href="#" :id="value.id" @click="deleteData($event)">删除</a>
+							</td>
 						</tr>
 					</tbody>
 					<tfoot>
@@ -45,7 +46,7 @@
 					</li>
 
 					<li v-for="n in currentPaginationCount" v-bind:class="activeNumber === (n + paginationNum * 10) ? 'active' : 'waves-effect'" @click="getPageData($event)" :id="n + paginationNum * 10">
-						<a href="javascript:void(0)">{{ n + paginationNum * 10  }}</a>
+						<a href="javascript:void(0)">{{ n + paginationNum * 10 }}</a>
 					</li>
 
 					<li id="chevron_right" class="waves-effect" @click="nextPageClick($event)">
@@ -58,49 +59,49 @@
 		<section id="addPanel">
 			<div class="row">
 				<div class="input-field col s12">
-					<i class="small material-icons prefix">subtitles</i>
-					<input id="title" type="text" class="validate">
-					<label id="musicLabel" for="title">名称</label>
+					<i class="small material-icons prefix">subtitles</i> <input id="title" type="text" class="validate"> <label id="musicLabel" for="title">名称</label>
 				</div>
 			</div>
 			<div class="row">
 				<div class="input-field col s12">
-					<i class="small material-icons prefix">subtitles</i>
-					<input id="author" type="text" class="validate">
-					<label id="authorLabel" for="author">作者</label>
+					<i class="small material-icons prefix">subtitles</i> <input id="author" type="text" class="validate"> <label id="authorLabel" for="author">作者</label>
 				</div>
 			</div>
 
-			<div id="filePanel">
+			<div id="filePanel" class="row">
 				<p>请上传MP3文件：</p>
-				<div><b id="fileDescribe"><span id="fileCompletePersent"></span></b>
-					<div class="progress">
-						<div class="determinate" style="width: 1%"></div>
-					</div>
-				</div>
 				<div id="container">
 					<a id="selectfiles" href="javascript:void(0);" class='btn waves-effect waves-light cyan lighten-1'>选择文件</a>
 				</div>
-
-				<pre id="console"></pre>
+				<div id="fileUpload">
+					<b id="fileDescribe"><span id="fileCompletePersent"></span></b>
+					<div class="progress">
+						<div class="determinate" style="width: 1%"></div>
+					</div>
+					<pre id="console"></pre>
 				<p>&nbsp;</p>
+				</div>
+
+				
 			</div>
 
-			<div id="videoPanel">
+			<div id="videoPanel" class="row">
 				<audio id="bgMusic" src="" controls loop>
 				</audio>
 				<button id="updateMusic" class="btn waves-effect waves-light cyan lighten-1">修改音乐</button>
 			</div>
-			
-			<button id="submit" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">提交
-    			<i class="material-icons right">send</i>
-  			</button>
-			<button id="cancel" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">取消
-    			<i class="material-icons right">replay</i>
-  			</button>
-  			
+
+			<div class="row">
+				<button id="submit" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">
+				提交 <i class="material-icons right">send</i>
+			</button>
+				<button id="cancel" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">
+				取消 <i class="material-icons right">replay</i>
+			</button>
+			</div>
+
 		</section>
-		
+
 		<div id="circleProgress" class="preloader-wrapper big active">
 			<div class="spinner-layer spinner-green-only">
 				<div class="circle-clipper left">
