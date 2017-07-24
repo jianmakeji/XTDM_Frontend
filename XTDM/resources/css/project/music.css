@@ -81,3 +81,7 @@
 	width: 50%;
 	margin-right: 10px;
 }
+
+#searchIcon:hover{
+	cursor: pointer;
+}

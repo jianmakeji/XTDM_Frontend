@@ -3,6 +3,7 @@ var insertOrUpdate = 0;//插入或更新标志
 var updateId = 0; //更新记录的ID
 var prePage = 1;//前一页，用于css修改点击样式
 var currentPage = 1; //当前页码
+var searchOrSelect = 0;
 
 var vum = new Vue({
 	el: '#dataTable',
@@ -78,12 +79,14 @@ var vum = new Vue({
 			$(".pagination").find('li[id='+id+']').addClass('active');
 			prePage = id;
 			
+			getDataList(id*10);
+			/*
 			$.getJSON("../music/getMusicByPage", {offset:id*10,limit:10}, function(data) {
 				
 				//vum.datas = data.slice((id - 1) * 10, (id - 1) * 10 + 10);
 				vum.datas = data.object.list;
 			});
-	
+			*/
 		},
 		prePageClick:function(e){
 			vum.paginationNum = vum.paginationNum - 1;
@@ -196,6 +199,55 @@ function resetPanel() {
 	$("#authorLabel").removeClass('active');
 	insertOrUpdate = 0;
 	showCategory = 0;
+}
+
+function getDataList(offset) {
+	
+	var keyword = $("#condition").val();
+	var data = {
+		'offset': offset,
+		'limit': '10',
+	};
+	
+	var requestUrl = "";
+	if (searchOrSelect == 1){
+		if (keyword == ""){
+			searchOrSelect = 0;
+			requestUrl = "../music/getMusicByPage",
+		}
+		else{
+			data.keyword = keyword;
+			requestUrl = "../music/getMusicKeywordByPage",
+		}
+		
+	}
+	else{
+		requestUrl = "../music/getMusicByPage",
+	}
+	
+	$.ajax({
+
+		type: "POST",
+		url: "../music/getMusicKeywordByPage",
+		dataType: "json",
+		data: data,
+		beforeSend: function() {
+			$("#circleProgress").show();
+		},
+		success: function(msg) {
+			//将数据通过vue.js更新到数据列表
+			vum.datas = data.object.list;
+			$("#circleProgress").hide();
+		},
+		statusCode: {
+			404: function() {
+				alert('page not found');
+			},
+			500: function() {
+
+			}
+		}
+	});
 }
 
 (function() {
@@ -324,6 +376,20 @@ function resetPanel() {
 				}
 			}
 		});
+	});
+	
+	//回车进行搜索查询
+	$("#condition").keydown(function(event) {
+		if(event.keyCode == 13) {
+			searchOrSelect = 1;
+			getDataList(0);
+		}
+	});
+
+	//点击搜索图标进行查询
+	$("#searchIcon").click(function() {
+		searchOrSelect = 1;
+		getDataList(0);
 	});
 
 })();

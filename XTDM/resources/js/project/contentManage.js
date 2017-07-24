@@ -1,5 +1,6 @@
 var prePage = 1; //前一页，用于css修改点击样式
 var currentPage = 0; //当前页码
+var searchOrSelect = 0;
 
 var categoryVue = new Vue({
 	el: '#dropdown',
@@ -35,6 +36,7 @@ var categoryVue = new Vue({
 	},
 	watch: {
 		selected: function(value) {
+			searchOrSelect = 0;
 			console.log(value);
 		}
 	}
@@ -97,10 +99,12 @@ var vum = new Vue({
 });
 
 function searchResult() {
+	searchOrSelect = 1;
 	var keyword = $("#condition").val();
 	var data = {
 		'offset': 0,
-		'limit': '10'
+		'limit': '10',
+		'keyword':keyword
 	};
 	$.ajax({
 
