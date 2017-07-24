@@ -134,6 +134,7 @@ var uploader = new plupload.Uploader({
 	init: {
 		PostInit: function() {
 			$("#console").html('');
+			serverUrl = '../uploadKey/1';
 		},
 
 		FilesAdded: function(up, files) {

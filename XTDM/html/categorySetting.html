@@ -23,7 +23,7 @@
 					<tbody>
 						<tr v-for="value in datas">
 							<td>{{value.name}}</td>
-							<td>{{value.describe}}</td>
+							<td>{{value.description}}</td>
 							<td><a href="#" :id="value.id" @click="updateData($event)">修改</a> <a href="#" :id="value.id" @click="deleteData($event)">删除</a></td>
 						</tr>
 					</tbody>

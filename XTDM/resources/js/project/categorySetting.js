@@ -11,16 +11,19 @@ var vum = new Vue({
 	methods: {
 		updateData: function(e) {
 			updateId = e.currentTarget.id;
-			var insertOrUpdate = 1;
+			insertOrUpdate = 1;
 
 			vum.datas.forEach(function(categoryObj) {
 				if(categoryObj.id == updateId) {
 					$("#title").val(categoryObj.name);
 					$("#titleLabel").addClass('active');
 
-					$("#describe").val(categoryObj.describe);
+					$("#describe").val(categoryObj.description);
 					$("#describeLabel").addClass('active');
 
+					$("#uploadThumb").attr('src', categoryObj.bgImgUrl);
+					picUrl = categoryObj.bgImgUrl;
+					
 					if(showCategory == 0) {
 						showCategory = 1;
 						$("#addPanel").show('slow');
@@ -37,10 +40,9 @@ var vum = new Vue({
 
 			$.ajax({
 
-				type: "POST",
+				type: "GET",
 				url: "../category/delete/"+id,
 				dataType: "json",
-				data: data,
 				beforeSend: function() {
 					$("#circleProgress").show();
 				},
@@ -48,7 +50,7 @@ var vum = new Vue({
 					var i = 0;
 					vum.datas.forEach(function(categoryObj) {
 						i = i + 1;
-						if(categoryObj.id == updateId) {
+						if(categoryObj.id == id) {
 							vum.datas.splice(i, 1);
 						}
 					});
@@ -93,6 +95,7 @@ var uploader = new plupload.Uploader({
 	init: {
 		PostInit: function() {
 			$("#console").html('');
+			serverUrl = '../uploadKey/2';
 		},
 
 		FilesAdded: function(up, files) {
@@ -162,7 +165,7 @@ function resetPanel() {
 	$(".progress").hide();
 	
 	$.getJSON("../category/getCategoryByPage",{offset:0,limit:1000}, function(data) {
-		vum.datas = data;
+		vum.datas = data.object.list;
 	});
 	
 	
@@ -177,11 +180,11 @@ function resetPanel() {
 		}
 	});
 
-	var bgImgUrl = "";
+	
 
 	$("#submit").click(function() {
 		let title = $("#title").val();
-		let describe = $("#describe").val();
+		let description = $("#describe").val();
 
 		if(title == "") {
 			Materialize.toast('标题不能为空!', 4000);
@@ -193,12 +196,12 @@ function resetPanel() {
 			return;
 		}
 
-		let data = {
+		let requestData = {
 			"name": title,
-			"describe": describe,
-			"bgImgUrl": bgImgUrl
+			"description": description,
+			"bgImgUrl": picUrl
 		};
-
+		
 		var requestUrl = "";
 		
 		if(insertOrUpdate == 0) {
@@ -207,19 +210,19 @@ function resetPanel() {
 		} else if(insertOrUpdate == 1) {
 			
 			//更新数据
-			data.push({
-				'id':
-				updateId
-			});
+			requestData.id = updateId;
 			requestUrl = "../category/update";
 		}
+		
+		console.log(requestData);
 
 		$.ajax({
 
 			type: "POST",
 			url: requestUrl,
+			contentType : 'application/json',
 			dataType: "json",
-			data: data,
+			data: JSON.stringify(requestData),
 			beforeSend: function() {
 				$("#circleProgress").show();
 			},
@@ -229,16 +232,17 @@ function resetPanel() {
 					//插入数据
 					vum.datas.push(requestData);
 				} else if(insertOrUpdate == 1) {
-					vum.datas.forEach(function(musicObj) {
-						if(musicObj.id == updateId) {
-							musicObj.name = title;
-							musicObj.author = author;
-							musicObj.url = mp3Url;
+					vum.datas.forEach(function(categoryObj) {
+						if(categoryObj.id == updateId) {
+							categoryObj.name = title;
+							categoryObj.description = description;
+							categoryObj.bgImgUrl = picUrl;
 						}
 					});
 				}
 
 				$("#circleProgress").hide();
+				$("#addPanel").hide();
 				resetPanel();
 			},
 			statusCode: {

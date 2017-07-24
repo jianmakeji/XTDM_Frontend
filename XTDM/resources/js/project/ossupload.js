@@ -9,6 +9,7 @@ var key = '';
 var expire = 0;
 var g_object_name = '';
 var now = timestamp = Date.parse(new Date()) / 1000;
+var serverUrl = '../uploadKey/1';
 
 function send_request() {
 	var xmlhttp = null;
@@ -19,7 +20,6 @@ function send_request() {
 	}
 
 	if(xmlhttp != null) {
-		serverUrl = 'http://localhost:8080/xtdm/uploadKey'
 		xmlhttp.open("GET", serverUrl, false);
 		xmlhttp.send(null);
 		return xmlhttp.responseText
