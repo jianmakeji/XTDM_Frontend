@@ -1,29 +1,47 @@
-var app = new Vue({
-	el: '#dropdown',
-	data: {
-		menus: [{
-			'id': '1',
-			'name': '人文'
-		}, {
-			'id': '2',
-			'name': '物语'
-		}, {
-			'id': '3',
-			'name': '风景'
-		}, {
-			'id': '4',
-			'name': '社区'
-		}]
-	},
-	methods: {
-		menuClick: function(event, index) {
-
+/**
+ * 初始化下拉列表框
+ */
+$.getJSON("../category/getCategoryByPage",{offset:0,limit:1000}, function(data) {
+	var categoryVue = new Vue({
+		el: '#dropdown',
+		data: {
+			selected: '',
+			menus: data.object.list
+		},
+		mounted: function() {
+			$('#dropdown select').material_select();
+			$('#categorySelect').change(function() {
+				categoryVue.selected = $('#categorySelect').val();
+			});
+		},
+		watch: {
+			selected: function(value) {
+				searchOrSelect = 0;
+				categoryId = value;
+				getDataList(0);
+			}
 		}
-	}
+	})
 });
 
+
 $(document).ready(function() {
-	$('select').material_select();
+	
+	(function ($) {
+        $.getUrlParam = function (name) {
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+          var r = window.location.search.substr(1).match(reg);
+          if (r != null) return unescape(r[2]); return null;
+        }
+      })(jQuery);
+ 
+      
+	var id = $.getUrlParam('id');
+	
+	alert(id);
+	if (id > 0){ //编辑操作
+		
+	}
 
 	$('.chips-initial').material_chip({
 		data: [{
@@ -36,7 +54,7 @@ $(document).ready(function() {
 	//对编辑器的操作最好在编辑器ready之后再做
 	ue.ready(function() {
 		//设置编辑器的内容
-		ue.setContent('hello');
+		//ue.setContent('hello');
 		//获取html内容，返回: <p>hello</p>
 		var html = ue.getContent();
 		//获取纯文本内容，返回: hello

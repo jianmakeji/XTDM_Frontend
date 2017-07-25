@@ -1,46 +1,33 @@
 var prePage = 1; //前一页，用于css修改点击样式
 var currentPage = 0; //当前页码
 var searchOrSelect = 0;
+var categoryId = 0;
 
-var categoryVue = new Vue({
-	el: '#dropdown',
-	data: {
-		selected: '',
-		menus: [{
-			'id': '1',
-			'name': '人文'
-		}, {
-			'id': '2',
-			'name': '物语'
-		}, {
-			'id': '3',
-			'name': '风景'
-		}, {
-			'id': '4',
-			'name': '社区'
-		}]
-	},
-	methods: {
-		menuClick: function(event, index) {
-
-			$("#breadcrumbs").html("内容管理   > " + text);
-			$("#categoryId").html(id);
-
+/**
+ * 初始化下拉列表框
+ */
+$.getJSON("../category/getCategoryByPage",{offset:0,limit:1000}, function(data) {
+	var categoryVue = new Vue({
+		el: '#dropdown',
+		data: {
+			selected: '',
+			menus: data.object.list
+		},
+		mounted: function() {
+			$('#dropdown select').material_select();
+			$('#categorySelect').change(function() {
+				categoryVue.selected = $('#categorySelect').val();
+			});
+		},
+		watch: {
+			selected: function(value) {
+				searchOrSelect = 0;
+				categoryId = value;
+				getDataList(0);
+			}
 		}
-	},
-	mounted: function() {
-		$('#dropdown select').material_select();
-		$('#categorySelect').change(function() {
-			categoryVue.selected = $('#categorySelect').val();
-		});
-	},
-	watch: {
-		selected: function(value) {
-			searchOrSelect = 0;
-			console.log(value);
-		}
-	}
-})
+	})
+});
 
 var vum = new Vue({
 	el: '#dataTable',
@@ -54,9 +41,42 @@ var vum = new Vue({
 		paginationCount: 0 //记录有多少分页块
 	},
 	methods: {
-		showData: function() {
-			$.getJSON("../resources/table.json", function(data) {
-				vum.datas = data;
+		updateData: function(e) {
+			let id = e.currentTarget.id;
+			vum.datas.forEach(function(articleObj) {
+				if(articleObj.id == id) {
+					if(articleObj.type == 0){
+						$("#managePanel").empty();
+						$("#managePanel").load("addArticleContent.html?id="+id);
+					}
+					else if (articleObj.type == 1){
+						$("#managePanel").empty();
+						$("#managePanel").load("addPptContent.html?id="+id);
+					}
+				}
+			});
+		},
+		deleteData: function(e) {
+			let id = e.currentTarget.id;
+
+			var deleteRequest = $.ajax({
+				type: "GET",
+				url: "../music/delete/"+id,
+				dataType: "json",
+				beforeSend: function() {
+					$("#circleProgress").show();
+				}
+			});
+			
+			var promise = deleteRequest.then(function(data){
+				var loadCurrentPageData = $.getJSON("../article/getArticleByPage", {offset:(currentPage - 1)*10,limit:10}, function(data) {
+					vum.datas = data.object.list;
+				});
+				return loadCurrentPageData;
+			})
+			
+			promise.done(function(data){
+				$("#circleProgress").hide();
 			});
 		},
 		getPageData: function(e) {
@@ -65,16 +85,8 @@ var vum = new Vue({
 			this.activeNumber = id;
 			$(".pagination").find('li[id=' + id + ']').addClass('active');
 			prePage = id;
-
-			$.getJSON("../resources/table.json", {
-				offset: id * 10,
-				limit: 10
-			}, function(data) {
-
-				vum.datas = data.slice((id - 1) * 10, (id - 1) * 10 + 10);
-
-			});
-
+			currentPage = id;
+			getDataList((id - 1)*10);
 		},
 		prePageClick: function(e) {
 			vum.paginationNum = vum.paginationNum - 1;
@@ -98,36 +110,51 @@ var vum = new Vue({
 	}
 });
 
-function searchResult() {
-	searchOrSelect = 1;
+function getDataList(offset) {
+	
 	var keyword = $("#condition").val();
 	var data = {
-		'offset': 0,
+		'offset': offset,
 		'limit': '10',
-		'keyword':keyword
 	};
+	
+	var requestUrl = "";
+	if (searchOrSelect == 1){
+		if (keyword == ""){
+			searchOrSelect = 0;
+			data.categoryId = categoryId;
+			requestUrl = "../article/getArticleByPage";
+		}
+		else{
+			data.keyword = keyword;
+			requestUrl = "../article/getArticleKeywordByPage";
+		}
+	}
+	else{
+		data.categoryId = categoryId;
+		requestUrl = "../article/getArticleByPage";
+	}
+	
 	$.ajax({
 
-		type: "POST",
-		url: "../article/getArticleKeywordByPage",
+		type: "GET",
+		url: requestUrl,
 		dataType: "json",
 		data: data,
 		beforeSend: function() {
 			$("#circleProgress").show();
 		},
-		success: function(msg) {
+		success: function(data) {
 			//将数据通过vue.js更新到数据列表
-
-			vum.datas.push(requestData);
-
+			vum.datas = data.object.list;
 			$("#circleProgress").hide();
 		},
 		statusCode: {
 			404: function() {
-				alert('page not found');
+				Materialize.toast('没有相应的请求地址!', 4000);
 			},
 			500: function() {
-
+				Materialize.toast('服务器内部错误!', 4000);
 			}
 		}
 	});
@@ -137,11 +164,12 @@ function searchResult() {
 	
 	var currentPage = 0;
 
-	$.getJSON("../resources/table.json", {
+	$.getJSON("../article/getArticleByPage", {
 		offset: 0,
-		limit: 10
+		limit: 10,
+		categoryId:0
 	}, function(data) {
-		var pageNum = Math.ceil(data.length / 10);
+		var pageNum = Math.ceil(data.object.count / 10);
 
 		if(pageNum > 10) {
 			vum.currentPaginationCount = 10;
@@ -149,8 +177,8 @@ function searchResult() {
 			vum.currentPaginationCount = pageNum;
 		}
 
-		vum.dataLength = data.length;
-		vum.datas = data.slice(currentPage * 10, currentPage * 10 + 10);
+		vum.dataLength = data.object.count;
+		vum.datas = data.object.list;
 		vum.pageNum = pageNum;
 		vum.paginationCount = Math.ceil(pageNum / 10);
 
@@ -191,5 +219,6 @@ function searchResult() {
 	$("#searchIcon").click(function() {
 		searchResult();
 	});
+	
 
 })();

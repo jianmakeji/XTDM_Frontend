@@ -48,10 +48,9 @@ var vum = new Vue({
 
 			var deleteRequest = $.ajax({
 
-				type: "POST",
-				url: "/music/delete/"+id,
+				type: "GET",
+				url: "../music/delete/"+id,
 				dataType: "json",
-				data: data,
 				beforeSend: function() {
 					$("#circleProgress").show();
 				}
@@ -59,7 +58,7 @@ var vum = new Vue({
 			});
 			
 			var promise = deleteRequest.then(function(data){
-				var loadCurrentPageData = $.getJSON("../music/getMusicByPage", {offset:currentPage*10,limit:10}, function(data) {
+				var loadCurrentPageData = $.getJSON("../music/getMusicByPage", {offset:(currentPage - 1)*10,limit:10}, function(data) {
 					vum.datas = data.object.list;
 				});
 				return loadCurrentPageData;
@@ -79,7 +78,7 @@ var vum = new Vue({
 			$(".pagination").find('li[id='+id+']').addClass('active');
 			prePage = id;
 			
-			getDataList(id*10);
+			getDataList((id - 1)*10);
 			/*
 			$.getJSON("../music/getMusicByPage", {offset:id*10,limit:10}, function(data) {
 				
@@ -213,38 +212,38 @@ function getDataList(offset) {
 	if (searchOrSelect == 1){
 		if (keyword == ""){
 			searchOrSelect = 0;
-			requestUrl = "../music/getMusicByPage",
+			requestUrl = "../music/getMusicByPage";
 		}
 		else{
 			data.keyword = keyword;
-			requestUrl = "../music/getMusicKeywordByPage",
+			requestUrl = "../music/getMusicKeywordByPage";
 		}
 		
 	}
 	else{
-		requestUrl = "../music/getMusicByPage",
+		requestUrl = "../music/getMusicByPage";
 	}
 	
 	$.ajax({
 
-		type: "POST",
-		url: "../music/getMusicKeywordByPage",
+		type: "GET",
+		url: requestUrl,
 		dataType: "json",
 		data: data,
 		beforeSend: function() {
 			$("#circleProgress").show();
 		},
-		success: function(msg) {
+		success: function(data) {
 			//将数据通过vue.js更新到数据列表
 			vum.datas = data.object.list;
 			$("#circleProgress").hide();
 		},
 		statusCode: {
 			404: function() {
-				alert('page not found');
+				Materialize.toast('没有相应的请求地址!', 4000);
 			},
 			500: function() {
-
+				Materialize.toast('服务器内部错误!', 4000);
 			}
 		}
 	});
@@ -351,9 +350,11 @@ function getDataList(offset) {
 				if(insertOrUpdate == 0) {
 					//插入数据
 					requestData.id = data.object;
-					var dateTime = new Date();
-					requestData.createTime = dateTime.toLocaleDateString();
-					vum.datas.push(requestData);
+					requestData.createTime = new Date().Format("yyyy-MM-dd HH:mm:ss");
+					if (vum.datas.length >= 10){
+						vum.datas.pop();
+					}
+					vum.datas.unshift(requestData);
 				} else if(insertOrUpdate == 1) {
 					vum.datas.forEach(function(musicObj) {
 						if(musicObj.id == updateId) {
@@ -369,10 +370,10 @@ function getDataList(offset) {
 			},
 			statusCode: {
 				404: function() {
-					alert('page not found');
+					Materialize.toast('没有相应的请求地址!', 4000);
 				},
 				500: function() {
-
+					Materialize.toast('服务器内部错误!', 4000);
 				}
 			}
 		});

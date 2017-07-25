@@ -234,7 +234,7 @@ function resetPanel() {
 				if(insertOrUpdate == 0) {
 					//插入数据
 					requestData.id = data.object;
-					vum.datas.push(requestData);
+					vum.datas.unshift(requestData);
 					
 				} else if(insertOrUpdate == 1) {
 					vum.datas.forEach(function(categoryObj) {
@@ -252,10 +252,10 @@ function resetPanel() {
 			},
 			statusCode: {
 				404: function() {
-					alert('page not found');
+					Materialize.toast('没有加载到相应页面!', 4000);
 				},
 				500: function() {
-
+					Materialize.toast('服务器内部错误!', 4000);
 				}
 			}
 		});

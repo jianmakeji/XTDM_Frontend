@@ -1,42 +1,38 @@
-var app = new Vue({
-	el: '#dropdown',
-	data: {
-		menus: [{
-			'id': '1',
-			'name': '人文'
-		}, {
-			'id': '2',
-			'name': '物语'
-		}, {
-			'id': '3',
-			'name': '风景'
-		}, {
-			'id': '4',
-			'name': '社区'
-		}]
-	},
-	methods: {
-		menuClick: function(event, index) {
 
-		}
-	}
-});
-
-var vum = new Vue({
-	el: '#dataTable',
-	data: {
-		datas: ""
-	},
-	methods: {
-		showData: function() {
-			$.getJSON("../resources/ppt.json", function(data) {
-				vum.datas = data;
+/**
+ * 初始化下拉列表框
+ */
+$.getJSON("../category/getCategoryByPage",{offset:0,limit:1000}, function(data) {
+	var categoryVue = new Vue({
+		el: '#dropdown',
+		data: {
+			selected: '',
+			menus: data.object.list
+		},
+		mounted: function() {
+			$('#dropdown select').material_select();
+			$('#categorySelect').change(function() {
+				categoryVue.selected = $('#categorySelect').val();
 			});
+		},
+		watch: {
+			selected: function(value) {
+				console.log(value);
+				searchOrSelect = 0;
+				categoryId = value;
+				getDataList(0);
+			}
 		}
-	}
+	})
 });
 
 $(document).ready(function() {
+	var id = $.url().param('id');
+	alert(id);
+	if (id > 0){ //编辑操作
+		
+	}
+
 	$('select').material_select();
 
 	$('.chips-initial').material_chip({
