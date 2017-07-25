@@ -27,7 +27,17 @@ $.getJSON("../category/getCategoryByPage",{offset:0,limit:1000}, function(data) 
 });
 
 $(document).ready(function() {
-	var id = $.url().param('id');
+	(function ($) {
+        $.getUrlParam = function (name) {
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+          var r = window.location.search.substr(1).match(reg);
+          if (r != null) return unescape(r[2]); return null;
+        }
+      })(jQuery);
+ 
+      
+	var id = $.getUrlParam('id');
+	
 	alert(id);
 	if (id > 0){ //编辑操作
 		
@@ -71,7 +81,7 @@ $(document).ready(function() {
 	});
 
 	$("#cancel").click(function() {
-		showCategory = 0;
-		$("#addPanel").hide();
+		$("#managePanel").empty();
+		$("#managePanel").load("contentManage.html");
 	});
 });

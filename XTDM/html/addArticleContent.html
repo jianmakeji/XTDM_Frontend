@@ -70,13 +70,16 @@
 
 						<div class="file-field input-field">
 
-							<div class="btn cyan lighten-1">
-								<span>缩略图</span>
-								<input type="file">
+							<div id="container">
+								<a id="selectfiles1" href="javascript:void(0);" class='btn waves-effect waves-light cyan lighten-1'>缩略图</a>
 							</div>
-							
-							<div class="file-path-wrapper">
-								<input class="file-path validate" type="text">
+							<div id="fileUpload">
+								<b id="fileDescribe"><span id="fileCompletePersent"></span></b>
+								<div class="progress">
+									<div class="determinate" style="width: 1%"></div>
+								</div>
+								<pre id="console"></pre>
+								<p>&nbsp;</p>
 							</div>
 						</div>
 						<p>图片比例为1:1</p>
@@ -88,19 +91,21 @@
 
 						<div class="file-field input-field">
 
-							<div class="btn cyan lighten-1">
-								<span>背景图</span>
-								<input type="file">
+							<div id="container">
+								<a id="selectfiles2" href="javascript:void(0);" class='btn waves-effect waves-light cyan lighten-1'>背景图</a>
 							</div>
-							
-							<div class="file-path-wrapper">
-								<input class="file-path validate" type="text">
+							<div id="fileUpload">
+								<b id="fileDescribe"><span id="fileCompletePersent"></span></b>
+								<div class="progress">
+									<div class="determinate" style="width: 1%"></div>
+								</div>
+								<pre id="console"></pre>
+								<p>&nbsp;</p>
 							</div>
 						</div>
 						<p>请上传1280*720尺寸的图片</p>
 						<img src="../resources/img/thumb.jpg" />
 					</div>
-					
 
 				</div>
 
