@@ -27,15 +27,15 @@
 				<div class="row">
 					<div class="input-field col s12">
 						<i class="small material-icons prefix">subtitles</i>
-						<input id="picTxt_title" type="text" class="validate">
-						<label for="picTxt_text">标题</label>
+						<input id="title" type="text" class="validate">
+						<label for="title">标题</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
 						<i class="small material-icons prefix">subtitles</i>
-						<textarea id="picTxt_abstract" class="materialize-textarea"></textarea>
-						<label for="picTxt_abstract">摘要</label>
+						<textarea id="abstract" class="materialize-textarea"></textarea>
+						<label for="abstract">摘要</label>
 					</div>
 				</div>
 				<div class="row">
@@ -56,10 +56,10 @@
 					<div id="recommand">
 						<label>是否设置为推荐</label>
 						<p>
-							<input name="recommandGroup" type="radio" id="recommand1" />
+							<input name="recommandGroup" type="radio" id="recommand1" value="1" />
 							<label for="recommand1">是</label>
 
-							<input name="recommandGroup" type="radio" id="recommand2" />
+							<input name="recommandGroup" type="radio" id="recommand2" value="0" />
 							<label for="recommand2">否</label>
 						</p>
 					</div>
@@ -67,44 +67,35 @@
 				</div>
 				<div class="row">
 					<div id="thumbPic">
-
-						<div class="file-field input-field">
-
-							<div id="container">
-								<a id="selectfiles1" href="javascript:void(0);" class='btn waves-effect waves-light cyan lighten-1'>缩略图</a>
+						<p>缩略图：图片比例为1:1</p>
+						<img id="uploadThumb" src="../resources/img/upload.png" />
+						<div id="uploadThumbInfo">
+							<div id="ossThumbfile">
+								<div><b id="thumbFileDescribe"><span id="thumbFileCompletePersent"></span></b>
+									<div class="progress">
+										<div class="determinate" style="width: 1%"></div>
+									</div>
+								</div>'
 							</div>
-							<div id="fileUpload">
-								<b id="fileDescribe"><span id="fileCompletePersent"></span></b>
-								<div class="progress">
-									<div class="determinate" style="width: 1%"></div>
-								</div>
-								<pre id="console"></pre>
-								<p>&nbsp;</p>
-							</div>
+							<pre id="thumbConsole"></pre>
+							<p>&nbsp;</p>
 						</div>
-						<p>图片比例为1:1</p>
-						<img src="../resources/img/thumb.jpg" />
-
 					</div>
 
 					<div id="bgPic">
-
-						<div class="file-field input-field">
-
-							<div id="container">
-								<a id="selectfiles2" href="javascript:void(0);" class='btn waves-effect waves-light cyan lighten-1'>背景图</a>
+						<p>背景图：请上传1280*720尺寸的图片</p>
+						<img id="uploadBg" src="../resources/img/upload.png" />
+						<div id="uploadBgInfo">
+							<div id="ossBgfile">
+								<div><b id="bgFileDescribe"><span id="bgFileCompletePersent"></span></b>
+									<div class="progress">
+										<div class="determinate" style="width: 1%"></div>
+									</div>
+								</div>'
 							</div>
-							<div id="fileUpload">
-								<b id="fileDescribe"><span id="fileCompletePersent"></span></b>
-								<div class="progress">
-									<div class="determinate" style="width: 1%"></div>
-								</div>
-								<pre id="console"></pre>
-								<p>&nbsp;</p>
-							</div>
+							<pre id="bgConsole"></pre>
+							<p>&nbsp;</p>
 						</div>
-						<p>请上传1280*720尺寸的图片</p>
-						<img src="../resources/img/thumb.jpg" />
 					</div>
 
 				</div>
@@ -113,22 +104,35 @@
 					<p>文章内容：</p>
 					<div class="col s12">
 						<script type="text/plain" id="myEditor">
-							<p>这里我可以写一些输入提示</p>
+
 						</script>
 					</div>
 				</div>
 
 			</div>
 		</section>
+		<div id="previewPanel">
+			<section id="previewTitle">
+				<div id="previewTitleContent">
+					<h1>“侗心乐坊”设计社会创新工作营开营</h1>
+					<h4>社区 2016-08-24</h4>
+				</div>
+			</section>
+			<section id="previewContent">
+				
+			</section>
+		</div>
 	</body>
 	<script type="text/javascript" charset="utf-8">
 		window.UEDITOR_HOME_URL = location.protocol + '//' + document.domain + (location.port ? (":" + location.port) : "") + "/xtdm/resources/js/ueditor/";
-		window.PROJECT_URL = location.protocol + '//' + document.domain + (location.port ? (":" + location.port) : "") + "/xtdm";
+		window.PROJECT_URL = location.protocol + '//' + document.domain + (location.port ? (":" + location.port) : "") + "/xtdm/";
 	</script>
 	<script type="text/javascript" charset="utf-8" src="../resources/js/ueditor/ueditor.config.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../resources/js/ueditor/ueditor.all.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../resources/js/ueditor/lang/zh-cn/zh-cn.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../resources/js/ueditor/lang/en/en.js"></script>
+	<script type="text/javascript" src="../resources/js/plupload-2.3.1/plupload.full.min.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="../resources/js/project/ossupload.js"></script>
 	<script type="text/javascript" src="../resources/js/project/addArticleContent.js"></script>
 
 </html>
