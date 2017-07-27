@@ -46,7 +46,7 @@
 				</div>
 				<div class="row">
 					<div id="dropdown" class="input-field">
-						<select>
+						<select id="categorySelect" v-model="selected">
 							<option value="" disabled selected>请选择</option>
 							<option v-for="menu in menus" :value="menu.id">{{menu.name}}</option>
 						</select>
@@ -72,7 +72,7 @@
 						<div id="uploadThumbInfo">
 							<div id="ossThumbfile">
 								<div><b id="thumbFileDescribe"><span id="thumbFileCompletePersent"></span></b>
-									<div class="progress">
+									<div id="ossThumbProgress" class="progress">
 										<div class="determinate" style="width: 1%"></div>
 									</div>
 								</div>'
@@ -88,7 +88,7 @@
 						<div id="uploadBgInfo">
 							<div id="ossBgfile">
 								<div><b id="bgFileDescribe"><span id="bgFileCompletePersent"></span></b>
-									<div class="progress">
+									<div  id="ossBgProgress"  class="progress">
 										<div class="determinate" style="width: 1%"></div>
 									</div>
 								</div>'
@@ -111,17 +111,7 @@
 
 			</div>
 		</section>
-		<div id="previewPanel">
-			<section id="previewTitle">
-				<div id="previewTitleContent">
-					<h1>“侗心乐坊”设计社会创新工作营开营</h1>
-					<h4>社区 2016-08-24</h4>
-				</div>
-			</section>
-			<section id="previewContent">
-				
-			</section>
-		</div>
+		
 	</body>
 	<script type="text/javascript" charset="utf-8">
 		window.UEDITOR_HOME_URL = location.protocol + '//' + document.domain + (location.port ? (":" + location.port) : "") + "/xtdm/resources/js/ueditor/";

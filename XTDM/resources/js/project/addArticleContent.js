@@ -1,6 +1,6 @@
 var thumbImgUrl = "";
 var bgImgUrl = "";
-var categoryId = 0;
+var categoryId = 1;
 var insertOrUpdate = 0;
 
 /**
@@ -21,12 +21,12 @@ $.getJSON("../category/getCategoryByPage", {
 			$('#categorySelect').change(function() {
 				categoryVue.selected = $('#categorySelect').val();
 			});
+			
 		},
 		watch: {
 			selected: function(value) {
 				searchOrSelect = 0;
 				categoryId = value;
-				getDataList(0);
 			}
 		}
 	})
@@ -61,13 +61,13 @@ var thumbUploader = new plupload.Uploader({
 		},
 
 		FilesAdded: function(up, files) {
-			$("#ossThumbfile .progress").show();
+			$("#ossThumbProgress").show();
 			plupload.each(files,
 				function(file) {
 					$("#thumbFileDescribe").append(file.name + ' (' + plupload.formatSize(file.size) + ') ');
 				});
-
-			set_upload_param(uploader, '', false);
+			$("#ossBgfile .determinate").show();
+			set_upload_param(thumbUploader, '', false);
 		},
 
 		BeforeUpload: function(up, file) {
@@ -83,7 +83,7 @@ var thumbUploader = new plupload.Uploader({
 		FileUploaded: function(up, file, info) {
 			if(info.status == 200) {
 				$("#thumbFileDescribe").innerHTML = '，上传成功！';
-				thumbImgUrl = host + "/" + get_uploaded_object_name(file.name) + "?x-oss-process=style/thumb-150";
+				thumbImgUrl = host + "/" + get_uploaded_object_name(file.name) + "?x-oss-process=style/thumb-300";
 				$("#uploadThumb").attr('src', thumbImgUrl);
 
 			} else {
@@ -93,7 +93,7 @@ var thumbUploader = new plupload.Uploader({
 
 		Error: function(up, err) {
 			if(err.code == -600) {
-				$("#thumbConsole").html('选择的文件太大了，不能超过10M!');
+				$("#thumbConsole").html('选择的文件太大了，不能超过1M!');
 
 			} else if(err.code == -601) {
 				$("#thumbConsole").html('选择的文件后缀不对!');
@@ -143,8 +143,8 @@ var bgUploader = new plupload.Uploader({
 				function(file) {
 					$("#bgFileDescribe").append(file.name + ' (' + plupload.formatSize(file.size) + ') ');
 				});
-
-			set_upload_param(uploader, '', false);
+			$("#ossBgProgress").show();
+			set_upload_param(bgUploader, '', false);
 		},
 
 		BeforeUpload: function(up, file) {
@@ -160,7 +160,7 @@ var bgUploader = new plupload.Uploader({
 		FileUploaded: function(up, file, info) {
 			if(info.status == 200) {
 				$("#bgFileDescribe").innerHTML = '，上传成功！';
-				bgImgUrl = host + "/" + get_uploaded_object_name(file.name) + "?x-oss-process=style/thumb-150";
+				bgImgUrl = host + "/" + get_uploaded_object_name(file.name) + "?x-oss-process=style/thumb-300";
 				$("#uploadBg").attr('src', bgImgUrl);
 
 			} else {
@@ -188,7 +188,8 @@ bgUploader.init();
 
 $(document).ready(function() {
 	
-	$("#previewPanel").hide();
+	$("#ossThumbProgress").hide();
+	$("#ossBgProgress").hide();
 	
 	(function($) {
 		$.getUrlParam = function(name) {
@@ -213,22 +214,12 @@ $(document).ready(function() {
 
 	var ue = UE.getEditor('myEditor');
 
-	//对编辑器的操作最好在编辑器ready之后再做
-	ue.ready(function() {
-		//设置编辑器的内容
-		//ue.setContent('hello');
-		//获取html内容，返回: <p>hello</p>
-		var html = ue.getContent();
-		//获取纯文本内容，返回: hello
-		var txt = ue.getContentTxt();
-	});
-
 	$("#submitBtn").click(function() {
 		var recommand = $('input:radio:checked').val();
 		var htmlContent = ue.getContent();
 
 		let title = $("#title").val();
-		let abstract = $("#abstract").val();
+		let abstractData = $("#abstract").val();
 		let tag = $('.chips-initial').material_chip('data');
 
 		if(title == "") {
@@ -236,7 +227,7 @@ $(document).ready(function() {
 			return;
 		}
 
-		if(describe == "") {
+		if(abstractData == "") {
 			Materialize.toast('描述不能为空!', 4000);
 			return;
 		}
@@ -250,22 +241,16 @@ $(document).ready(function() {
 			Materialize.toast('文章标签不能为空!', 4000);
 			return;
 		}
-		
-		if(htmlContent == "") {
-			Materialize.toast('文章标签不能为空!', 4000);
-			return;
-		}
-		
 		let requestData = {
 			"title": title,
-			"abstractContent": description,
+			"abstractContent": abstractData,
 			"categoryId": categoryId,
 			"label": tag,
 			"recommand": recommand,
 			"thumb": thumbImgUrl,
 			"bgUrl": bgImgUrl,
 			"type": 0,
-			"content": htmlContent
+			"content": txtContent
 		};
 
 		var requestUrl = "";
@@ -325,13 +310,9 @@ $(document).ready(function() {
 	$("#browserBtn").click(function() {
 		var recommand = $('input:radio:checked').val();
 		var htmlContent = ue.getContent();
-		var txtContent = ue.getContentTxt();
-
-		console.log(htmlContent);
-		console.log(txtContent);
-
+		
 		let title = $("#title").val();
-		let abstract = $("#abstract").val();
+		let abstractData = $("#abstract").val();
 		let tag = $('.chips-initial').material_chip('data');
 
 		if(title == "") {
@@ -339,7 +320,7 @@ $(document).ready(function() {
 			return;
 		}
 
-		if(describe == "") {
+		if(abstractData == "") {
 			Materialize.toast('描述不能为空!', 4000);
 			return;
 		}
@@ -353,32 +334,14 @@ $(document).ready(function() {
 			Materialize.toast('文章标签不能为空!', 4000);
 			return;
 		}
-
-		$("#previewContent").html(txtContent);
 		
-		const columnWidth = 200;
-		const columnGap = 15;
-		const fontSize = 16;
-		const lineHeight = 24;
-
-		var textCount = $("#previewContent").html().length;
-		let windowHeight = $(window).height();
-		let imgCount = $('#previewContent').children('img').length;
-
-		$("#previewContent img").each(function() {
-			let imgHeight = $(this).height();
-			textCount += Math.ceil(columnWidth / fontSize) * Math.ceil(imgHeight / lineHeight);
-		});
+		if(htmlContent == "") {
+			Materialize.toast('文章内容不能为空!', 4000);
+			return;
+		}
+		window.localStorage.setItem("htmlContent",htmlContent);
 		
-		let columnCount = Math.ceil(textCount / (Math.ceil(windowHeight / lineHeight) * Math.ceil(200 / fontSize)));
-
-		$("#previewContent").css({
-			'column-fill': 'balance',
-			'column-count': columnCount,
-			'column-width': columnWidth,
-			'column-gap': columnGap,
-			'width': 215 * (columnCount + 1)
-		});
+		window.open("articlePreview.html?title="+title+"&bgImage="+bgImgUrl);
 
 	});
 

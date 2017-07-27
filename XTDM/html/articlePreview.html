@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#previewTitle {
+				width: 400px;
+				height: 95%;
+				background-color: #1B6D85;
+				position: absolute;
+				left: 15px;
+				top: 15px;
+			}
+			
+			#previewContent {
+				font-size: 16px;
+				line-height: 24px;
+				position: absolute;
+				left: 450px;
+				top: 15px;
+				color: #666666;
+			}
+			
+			#previewContent img {
+				width: 200px;
+				height: auto;
+			}
+			
+			#previewTitleContent {
+				width: 250px;
+				height: 200px;
+				background-color: white;
+				position: absolute;
+				right: 0px;
+				bottom: 0px;
+				color: #666666;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="previewPanel">
+			<section id="previewTitle">
+				<div id="previewTitleContent">
+					<h1 id="title">“侗心乐坊”设计社会创新工作营开营</h1>
+					<h4 id="category">社区 2016-08-24</h4>
+				</div>
+			</section>
+			<section id="previewContent">
+
+			</section>
+		</div>
+	</body>
+	<script type="text/javascript" src="../resources/js/jquery/jquery-3.2.1.js"></script>
+	<script type="text/javascript">
+		(function($) {
+			$.getUrlParam = function(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+		})(jQuery);
+
+		var title = $.getUrlParam('title');
+		var htmlContent = window.localStorage.getItem("htmlContent");
+		
+		$("#previewContent").append(htmlContent);
+		
+		var bgImage = $.getUrlParam('bgImage');
+		
+		$("#previewTitle").css('background-image','url('+bgImage+')');
+		
+		const columnWidth = 200;
+		const columnGap = 15;
+		const fontSize = 16;
+		const lineHeight = 24;
+
+		var textCount = htmlContent.length;
+		var regixNumber = /[0-9]/g;
+		var regixLetter = /[a-zA-Z]/g;
+		var countNumber =htmlContent.match(regixNumber).length;
+		var countLetter =htmlContent.match(regixLetter).length;
+		textCount = textCount - Math.ceil(countNumber/2);
+		textCount = textCount - Math.ceil(countLetter);
+		
+		let windowHeight = $(window).height();
+		let imgCount = $('#previewContent').children('img').length;
+		
+		$("#previewContent img").each(function() {
+			let imgHeight = $(this).height();
+			textCount += Math.ceil(columnWidth / fontSize) * Math.ceil(imgHeight / lineHeight);
+		});
+		
+		let columnCount = Math.ceil(textCount / (Math.ceil(windowHeight / lineHeight) * Math.ceil(200 / fontSize)));
+		
+		$("#previewContent").css({
+			'column-fill': 'balance',
+			'column-count': columnCount,
+			'column-width': columnWidth,
+			'column-gap': columnGap,
+			'width': 215 * (columnCount + 1)
+		});
+		
+		
+	</script>
+
+</html>

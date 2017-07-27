@@ -17,10 +17,8 @@ $.getJSON("../category/getCategoryByPage",{offset:0,limit:1000}, function(data) 
 		},
 		watch: {
 			selected: function(value) {
-				console.log(value);
 				searchOrSelect = 0;
 				categoryId = value;
-				getDataList(0);
 			}
 		}
 	})

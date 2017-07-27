@@ -58,65 +58,23 @@
 
 #thumbPic {
 	display: inline-block;
-	width: 30%;
-	height: auto;
+	width: auto;
+	height: 200px;
 }
 
 #thumbPic img {
-	width: 100%;
-	height: auto;
+	width: auto;
+	height: 200px;
 }
 
 #bgPic {
 	display: inline-block;
 	margin-left: 50px;
-	width: 30%;
-	height: auto;
+	width: auto;
+	height:  200px;
 }
 
 #bgPic img {
-	width: 100%;
-	height: auto;
-}
-
-#ossThumbfile .progress {
-	visibility: hidden;
-}
-
-#uploadBgInfo .progress {
-	visibility: hidden;
-}
-
-#previewTitle {
-	width: 400px;
-	height: 95%;
-	background-color: #1B6D85;
-	position: absolute;
-	left: 15px;
-	top: 15px;
-	background-image: url(img/huge2.jpg);
-}
-
-#previewContent {
-	font-size: 16px;
-	line-height: 24px;
-	position: absolute;
-	left: 450px;
-	top: 15px;
-	color: #666666;
-}
-
-#previewContent img {
-	width: 200px;
-	height: auto;
-}
-
-#previewTitleContent {
-	width: 250px;
+	width: auto;
 	height: 200px;
-	background-color: white;
-	position: absolute;
-	right: 0px;
-	bottom: 0px;
-	color: #666666;
 }

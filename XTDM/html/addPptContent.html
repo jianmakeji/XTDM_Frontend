@@ -50,7 +50,7 @@
 					</div>
 					<div class="row">
 						<div id="dropdown" class="input-field">
-							<select>
+							<select id="categorySelect" v-model="selected">
 								<option value="" disabled selected>请选择</option>
 								<option v-for="menu in menus" :value="menu.id">{{menu.name}}</option>
 							</select>
