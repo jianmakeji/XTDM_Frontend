@@ -1,3 +1,7 @@
+var thumbImgUrl = "";
+var bgImgUrl = "";
+var categoryId = 1;
+var insertOrUpdate = 0;
 
 /**
  * 初始化下拉列表框

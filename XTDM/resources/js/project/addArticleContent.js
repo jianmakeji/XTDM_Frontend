@@ -2,7 +2,7 @@ var thumbImgUrl = "";
 var bgImgUrl = "";
 var categoryId = 1;
 var insertOrUpdate = 0;
-
+var categoryVue;
 /**
  * 初始化下拉列表框
  */
@@ -10,7 +10,7 @@ $.getJSON("../category/getCategoryByPage", {
 	offset: 0,
 	limit: 1000
 }, function(data) {
-	var categoryVue = new Vue({
+	categoryVue = new Vue({
 		el: '#dropdown',
 		data: {
 			selected: '',
@@ -21,7 +21,7 @@ $.getJSON("../category/getCategoryByPage", {
 			$('#categorySelect').change(function() {
 				categoryVue.selected = $('#categorySelect').val();
 			});
-			
+
 		},
 		watch: {
 			selected: function(value) {
@@ -186,10 +186,64 @@ var bgUploader = new plupload.Uploader({
 
 bgUploader.init();
 
+function loadingArticleById(id,ue) {
+
+	$.ajax({
+		type: "POST",
+		url: "../article/getArticleDetailById/" + id,
+		contentType: 'application/json',
+		dataType: "json",
+		beforeSend: function() {
+			$("#circleProgress").show();
+		},
+		success: function(data) {
+			$("#title").val(data.object.title);
+			$("#abstract").val(data.object.abstractContent);
+			var label = data.object.label;
+			$('.chips-initial').material_chip({
+				data: [{
+					tag: 'Apple',
+				}, {
+					tag: 'Microsoft',
+				}, {
+					tag: 'Google',
+				}],
+			});
+			
+			var recommand = data.object.recommand;
+			if (recommand == 0){
+				$("#recommand2").attr("checked","checked");
+			}
+			else if (recommand == 1){ //推荐 
+				$("#recommand1").attr("checked","checked");
+			}
+			categoryVue.selected = data.object.categoryId;
+			$("#uploadThumb").attr('src', data.object.thumb);
+			$("#uploadBg").attr('src', data.object.bgUrl);
+			ue.setContent(data.object.content);
+			
+			thumbImgUrl = data.object.thumb;
+			bgImgUrl = data.object.bgUrl;
+			$("#circleProgress").hide();
+
+		},
+		statusCode: {
+			404: function() {
+				Materialize.toast('没有加载到相应页面!', 4000);
+			},
+			500: function() {
+				Materialize.toast('服务器内部错误!', 4000);
+			}
+		}
+	});
+}
+
 $(document).ready(function() {
-	
+
 	$("#ossThumbProgress").hide();
 	$("#ossBgProgress").hide();
+
+	var ue = UE.getEditor('myEditor');
 	
 	(function($) {
 		$.getUrlParam = function(name) {
@@ -212,7 +266,6 @@ $(document).ready(function() {
 		}],
 	});
 
-	var ue = UE.getEditor('myEditor');
 
 	$("#submitBtn").click(function() {
 		var recommand = $('input:radio:checked').val();
@@ -310,7 +363,7 @@ $(document).ready(function() {
 	$("#browserBtn").click(function() {
 		var recommand = $('input:radio:checked').val();
 		var htmlContent = ue.getContent();
-		
+
 		let title = $("#title").val();
 		let abstractData = $("#abstract").val();
 		let tag = $('.chips-initial').material_chip('data');
@@ -334,14 +387,14 @@ $(document).ready(function() {
 			Materialize.toast('文章标签不能为空!', 4000);
 			return;
 		}
-		
+
 		if(htmlContent == "") {
 			Materialize.toast('文章内容不能为空!', 4000);
 			return;
 		}
-		window.localStorage.setItem("htmlContent",htmlContent);
-		
-		window.open("articlePreview.html?title="+title+"&bgImage="+bgImgUrl);
+		window.localStorage.setItem("htmlContent", htmlContent);
+
+		window.open("articlePreview.html?title=" + title + "&bgImage=" + bgImgUrl);
 
 	});
 
