@@ -254,18 +254,17 @@ $(document).ready(function() {
 		}
 	})(jQuery);
 
-	var id = $.getUrlParam('id');
-
-	if(id > 0) { //编辑操作
-
-	}
-
 	$('.chips-initial').material_chip({
 		data: [{
 			tag: '新通道',
 		}],
 	});
+	
+	var id = $.getUrlParam('id');
 
+	if(id > 0) { //编辑操作
+		loadingArticleById(id,ue);
+	}
 
 	$("#submitBtn").click(function() {
 		var recommand = $('input:radio:checked').val();
