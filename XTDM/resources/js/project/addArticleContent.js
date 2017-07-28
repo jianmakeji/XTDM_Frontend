@@ -261,7 +261,8 @@ $(document).ready(function() {
 	});
 	
 	var id = $.getUrlParam('id');
-
+	console.log("id:"+id);
+	
 	if(id > 0) { //编辑操作
 		loadingArticleById(id,ue);
 	}
@@ -273,7 +274,16 @@ $(document).ready(function() {
 		let title = $("#title").val();
 		let abstractData = $("#abstract").val();
 		let tag = $('.chips-initial').material_chip('data');
-
+		console.log(tag);
+		var label = "";
+		if (tag.length > 0){
+			tag.forEach(function(object,i){
+			    console.log(object.tag);
+			    label = label + object.tag + ",";
+			})
+			
+		}
+		
 		if(title == "") {
 			Materialize.toast('标题不能为空!', 4000);
 			return;
@@ -289,7 +299,7 @@ $(document).ready(function() {
 			return;
 		}
 
-		if(tag == "") {
+		if(tag.length < 1) {
 			Materialize.toast('文章标签不能为空!', 4000);
 			return;
 		}
@@ -297,12 +307,12 @@ $(document).ready(function() {
 			"title": title,
 			"abstractContent": abstractData,
 			"categoryId": categoryId,
-			"label": tag,
+			"label": label,
 			"recommand": recommand,
 			"thumb": thumbImgUrl,
 			"bgUrl": bgImgUrl,
 			"type": 0,
-			"content": txtContent
+			"content": htmlContent
 		};
 
 		var requestUrl = "";
@@ -329,24 +339,11 @@ $(document).ready(function() {
 			},
 			success: function(data) {
 				//将数据通过vue.js更新到数据列表
-				if(insertOrUpdate == 0) {
-					//插入数据
-					requestData.id = data.object;
-					vum.datas.unshift(requestData);
-
-				} else if(insertOrUpdate == 1) {
-					vum.datas.forEach(function(categoryObj) {
-						if(categoryObj.id == updateId) {
-							categoryObj.name = title;
-							categoryObj.description = description;
-							categoryObj.bgImgUrl = picUrl;
-						}
-					});
-				}
-
+				Materialize.toast('操作成功!', 4000);
 				$("#circleProgress").hide();
 				$("#addPanel").hide();
-				resetPanel();
+				$("#managePanel").empty();
+				$("#managePanel").load("contentManage.html");
 			},
 			statusCode: {
 				404: function() {

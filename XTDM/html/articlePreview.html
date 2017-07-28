@@ -76,7 +76,7 @@
 		const columnWidth = 200;
 		const columnGap = 15;
 		const fontSize = 16;
-		const lineHeight = 24;
+		const lineHeight = 26;
 
 		var textCount = htmlContent.length;
 		var regixNumber = /[0-9]/g;
@@ -84,7 +84,7 @@
 		var countNumber =htmlContent.match(regixNumber).length;
 		var countLetter =htmlContent.match(regixLetter).length;
 		textCount = textCount - Math.ceil(countNumber/2);
-		textCount = textCount - Math.ceil(countLetter);
+		textCount = textCount - Math.ceil(countLetter/2);
 		
 		let windowHeight = $(window).height();
 		let imgCount = $('#previewContent').children('img').length;
