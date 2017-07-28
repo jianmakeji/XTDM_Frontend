@@ -189,7 +189,7 @@ bgUploader.init();
 function loadingArticleById(id,ue) {
 
 	$.ajax({
-		type: "POST",
+		type: "GET",
 		url: "../article/getArticleDetailById/" + id,
 		contentType: 'application/json',
 		dataType: "json",
@@ -198,16 +198,19 @@ function loadingArticleById(id,ue) {
 		},
 		success: function(data) {
 			$("#title").val(data.object.title);
+			$("#title").addClass('active');
 			$("#abstract").val(data.object.abstractContent);
+			$("#abstract").addClass('active');
 			var label = data.object.label;
+			var labelArray = label.split(',');
+			var labelData = [];
+			labelArray.forEach(function(tag,i){
+				var obj = {'tag':tag};
+			    labelData.push(obj);
+			})
+			
 			$('.chips-initial').material_chip({
-				data: [{
-					tag: 'Apple',
-				}, {
-					tag: 'Microsoft',
-				}, {
-					tag: 'Google',
-				}],
+				data:labelData,
 			});
 			
 			var recommand = data.object.recommand;
@@ -217,11 +220,13 @@ function loadingArticleById(id,ue) {
 			else if (recommand == 1){ //推荐 
 				$("#recommand1").attr("checked","checked");
 			}
+			
 			categoryVue.selected = data.object.categoryId;
+			
 			$("#uploadThumb").attr('src', data.object.thumb);
 			$("#uploadBg").attr('src', data.object.bgUrl);
-			ue.setContent(data.object.content);
-			
+			//ue.setContent(data.object.content);
+			ue.execCommand('insertHtml', data.object.content);
 			thumbImgUrl = data.object.thumb;
 			bgImgUrl = data.object.bgUrl;
 			$("#circleProgress").hide();
@@ -244,15 +249,6 @@ $(document).ready(function() {
 	$("#ossBgProgress").hide();
 
 	var ue = UE.getEditor('myEditor');
-	
-	(function($) {
-		$.getUrlParam = function(name) {
-			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-			var r = window.location.search.substr(1).match(reg);
-			if(r != null) return unescape(r[2]);
-			return null;
-		}
-	})(jQuery);
 
 	$('.chips-initial').material_chip({
 		data: [{
@@ -260,7 +256,7 @@ $(document).ready(function() {
 		}],
 	});
 	
-	var id = $.getUrlParam('id');
+	var id = window.localStorage.getItem("updateArticleId");
 	console.log("id:"+id);
 	
 	if(id > 0) { //编辑操作
@@ -274,7 +270,6 @@ $(document).ready(function() {
 		let title = $("#title").val();
 		let abstractData = $("#abstract").val();
 		let tag = $('.chips-initial').material_chip('data');
-		console.log(tag);
 		var label = "";
 		if (tag.length > 0){
 			tag.forEach(function(object,i){
