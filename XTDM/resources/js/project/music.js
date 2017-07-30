@@ -8,7 +8,7 @@ var searchOrSelect = 0;
 var vum = new Vue({
 	el: '#dataTable',
 	data: {
-		datas: "",
+		datas: [],
 		pageNum: "", //数据总共分为多少页
 		activeNumber: 1, //当前显示页的ID
 		dataLength: 0, //总数据长度

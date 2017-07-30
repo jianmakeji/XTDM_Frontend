@@ -27,6 +27,7 @@ $.getJSON("../category/getCategoryByPage", {
 			selected: function(value) {
 				searchOrSelect = 0;
 				categoryId = value;
+				console.log(categoryId);
 			}
 		}
 	})
@@ -221,12 +222,12 @@ function loadingArticleById(id,ue) {
 				$("#recommand1").attr("checked","checked");
 			}
 			
-			categoryVue.selected = data.object.categoryId;
+			$("#categorySelect option[value='"+data.object.categoryId+"']").attr("selected", true);
 			
 			$("#uploadThumb").attr('src', data.object.thumb);
 			$("#uploadBg").attr('src', data.object.bgUrl);
-			//ue.setContent(data.object.content);
-			ue.execCommand('insertHtml', data.object.content);
+			ue.setContent(data.object.content);
+			
 			thumbImgUrl = data.object.thumb;
 			bgImgUrl = data.object.bgUrl;
 			$("#circleProgress").hide();
@@ -256,8 +257,7 @@ $(document).ready(function() {
 		}],
 	});
 	
-	var id = window.localStorage.getItem("updateArticleId");
-	console.log("id:"+id);
+	var id = window.localStorage.getItem("articleId");
 	
 	if(id > 0) { //编辑操作
 		loadingArticleById(id,ue);
@@ -270,13 +270,12 @@ $(document).ready(function() {
 		let title = $("#title").val();
 		let abstractData = $("#abstract").val();
 		let tag = $('.chips-initial').material_chip('data');
+		
 		var label = "";
 		if (tag.length > 0){
 			tag.forEach(function(object,i){
-			    console.log(object.tag);
 			    label = label + object.tag + ",";
 			})
-			
 		}
 		
 		if(title == "") {

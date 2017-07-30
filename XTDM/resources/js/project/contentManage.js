@@ -45,15 +45,14 @@ var vum = new Vue({
 			let id = e.currentTarget.id;
 			vum.datas.forEach(function(articleObj) {
 				if(articleObj.id == id) {
-					window.localStorage.setItem("updateArticleId",id);
+					window.localStorage.setItem("articleId", id);
 					if(articleObj.type == 0){
 						$("#managePanel").empty();
 						$("#managePanel").load("addArticleContent.html");
 					}
 					else if (articleObj.type == 1){
 						$("#managePanel").empty();
-						
-						$("#managePanel").load("addPptContent.html?id="+id);
+						$("#managePanel").load("addPptContent.html");
 					}
 				}
 			});
@@ -191,11 +190,13 @@ function getDataList(offset) {
 	});
 
 	$("#addArticleContent").click(function() {
+		window.localStorage.setItem("articleId", 0);
 		$("#managePanel").empty();
 		$("#managePanel").load("addArticleContent.html");
 	});
 
 	$("#addPptContent").click(function() {
+		window.localStorage.setItem("articleId", 0);
 		$("#managePanel").empty();
 		$("#managePanel").load("addPptContent.html");
 	});

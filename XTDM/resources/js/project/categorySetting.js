@@ -6,7 +6,7 @@ var updateId = 0;
 var vum = new Vue({
 	el: '#dataTable',
 	data: {
-		datas: ""
+		datas: []
 	},
 	methods: {
 		updateData: function(e) {
@@ -162,6 +162,7 @@ function resetPanel() {
 	$("#describeLabel").removeClass('active');
 	insertOrUpdate = 0;
 	showCategory = 0;
+	picUrl="";
 }
 
 (function() {

@@ -45,12 +45,12 @@
 					</div>
 				</div>
 				<div class="row">
+					<label>文章类别:</label>
 					<div id="dropdown" class="input-field">
-						<select id="categorySelect" v-model="selected">
-							<option value="" disabled selected>请选择</option>
+						<select id="categorySelect" v-model="selected" class="browser-default">
+							<option value="" disabled selected>选择文章类别</option>
 							<option v-for="menu in menus" :value="menu.id">{{menu.name}}</option>
 						</select>
-						<label>选择文章类别</label>
 					</div>
 
 					<div id="recommand">
