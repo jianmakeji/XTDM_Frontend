@@ -23,23 +23,7 @@
 	padding-top: 20px;
 }
 
-#thumbPic {
-	float: left;
-}
 
-#thumbPic img {
-	width: 100%;
-	height: auto;
-}
-
-#bgPic {
-	float: right;
-}
-
-#bgPic img {
-	width: 100%;
-	height: auto;
-}
 
 #pptContent {
 	float: left;
@@ -72,14 +56,16 @@
 	border: dashed 1px #00bbd3;
 }
 
-#addPanelForm{
-	width: 50%;
-	float: left;
+#pptPic{
+	width: 30%;
+	height: auto;
+	float: left;	
 }
 
-#addPanel img{
+#describe{
 	width: 40%;
-	float: right;
+	height: auto;
+	float: left;
 }
 
 #submit {

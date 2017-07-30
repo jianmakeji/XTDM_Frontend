@@ -31,15 +31,15 @@
 					<div class="row">
 						<div class="input-field col s12">
 							<i class="small material-icons prefix">subtitles</i>
-							<input id="picTxt_title" type="text" class="validate">
-							<label for="picTxt_text">标题</label>
+							<input id="title" type="text" class="validate">
+							<label for="text">标题</label>
 						</div>
 					</div>
 					<div class="row">
 						<div class="input-field col s12">
 							<i class="small material-icons prefix">subtitles</i>
-							<textarea id="picTxt_abstract" class="materialize-textarea"></textarea>
-							<label for="picTxt_abstract">摘要</label>
+							<textarea id="abstract" class="materialize-textarea"></textarea>
+							<label for="abstract">摘要</label>
 						</div>
 					</div>
 					<div class="row">
@@ -49,12 +49,12 @@
 						</div>
 					</div>
 					<div class="row">
+						<label>文章类别:</label>
 						<div id="dropdown" class="input-field">
-							<select id="categorySelect" v-model="selected">
-								<option value="" disabled selected>请选择</option>
+							<select id="categorySelect" v-model="selected" class="browser-default">
+								<option value="" disabled selected>选择文章类别</option>
 								<option v-for="menu in menus" :value="menu.id">{{menu.name}}</option>
 							</select>
-							<label>选择文章类别</label>
 						</div>
 
 						<div id="recommand">
@@ -86,9 +86,10 @@
 								</thead>
 								<tbody>
 									<tr v-for="value in datas">
-										<td><img :src="value.name" /></td>
+										<td><img :src="value.pptPic" /></td>
 										<td>{{value.describe}}</td>
-										<td>修改 删除</td>
+										<td><a href="#" :id="value.pptPic" @click="updateData($event)">修改</a>
+										<a href="#" :id="value.pptPic" @click="deleteData($event)">删除</a></td>
 									</tr>
 								</tbody>
 								<tfoot>
@@ -104,37 +105,37 @@
 				<div class="row">
 					<div id="thumbPic">
 
-						<div class="file-field input-field">
-
-							<div class="btn cyan lighten-1">
-								<span>缩略图</span>
-								<input type="file">
+						<p>缩略图：图片比例为1:1</p>
+						<img id="uploadThumb" src="../resources/img/upload.png" />
+						<div id="uploadThumbInfo">
+							<div id="ossThumbfile">
+								<div><b id="thumbFileDescribe"><span id="thumbFileCompletePersent"></span></b>
+									<div id="ossThumbProgress" class="progress">
+										<div class="determinate" style="width: 1%"></div>
+									</div>
+								</div>'
 							</div>
-
-							<div class="file-path-wrapper">
-								<input class="file-path validate" type="text">
-							</div>
+							<pre id="thumbConsole"></pre>
+							<p>&nbsp;</p>
 						</div>
-						<p>图片比例为1:1</p>
-						<img src="../resources/img/thumb.jpg" />
 
 					</div>
 
 					<div id="bgPic">
 
-						<div class="file-field input-field">
-
-							<div class="btn cyan lighten-1">
-								<span>背景图</span>
-								<input type="file">
+						<p>背景图：请上传1280*720尺寸的图片</p>
+						<img id="uploadBg" src="../resources/img/upload.png" />
+						<div id="uploadBgInfo">
+							<div id="ossBgfile">
+								<div><b id="bgFileDescribe"><span id="bgFileCompletePersent"></span></b>
+									<div id="ossBgProgress" class="progress">
+										<div class="determinate" style="width: 1%"></div>
+									</div>
+								</div>'
 							</div>
-
-							<div class="file-path-wrapper">
-								<input class="file-path validate" type="text">
-							</div>
+							<pre id="bgConsole"></pre>
+							<p>&nbsp;</p>
 						</div>
-						<p>请上传1280*720尺寸的图片</p>
-						<img src="../resources/img/thumb.jpg" />
 					</div>
 
 				</div>
@@ -145,18 +146,24 @@
 
 		<section id="addPanel">
 			<div id="addPanelForm">
-				<div class="file-field input-field">
+				<div id="pptPic">
+					<p>幻灯片图片：</p>
+					<img id="uploadPpt" src="../resources/img/upload.png" />
+					<div id="uploadPptInfo">
+						<div id="ossPptfile">
+							<div><b id="pptFileDescribe"><span id="pptFileCompletePersent"></span></b>
+								<div id="ossPptProgress" class="progress">
+									<div class="determinate" style="width: 1%"></div>
+								</div>
+							</div>'
+						</div>
+						<pre id="pptConsole"></pre>
+						<p>&nbsp;</p>
+					</div>
 
-					<div class="btn cyan lighten-1">
-						<span>文件</span>
-						<input type="file">
-					</div>
-					<div class="file-path-wrapper">
-						<input class="file-path validate" type="text">
-					</div>
 				</div>
 
-				<div class="row">
+				<div id="describe" class="row">
 					<div class="input-field col s12">
 						<i class="small material-icons prefix">subtitles</i>
 						<textarea id="textarea1" class="materialize-textarea"></textarea>
@@ -165,12 +172,10 @@
 				</div>
 			</div>
 
-			<img src="img/thumb.jpg">
-
-			<button id="submit" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">提交
+			<button id="addPptBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">提交
     			<i class="material-icons right">send</i>
   			</button>
-			<button id="cancel" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">取消
+			<button id="cancelPptBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">取消
     			<i class="material-icons right">replay</i>
   			</button>
 		</section>
