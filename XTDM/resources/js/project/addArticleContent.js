@@ -33,158 +33,16 @@ $.getJSON("../category/getCategoryByPage", {
 	})
 });
 
-var thumbUploader = new plupload.Uploader({
-	runtimes: 'html5,flash,silverlight,html4',
-	browse_button: 'uploadThumb',
-	//multi_selection: false,
-	//container: document.getElementById('container'),
-	flash_swf_url: '../resources/js/plupload-2.3.1/Moxie.swf',
-	silverlight_xap_url: '../resources/js/plupload-2.3.1/Moxie.xap',
-	url: 'http://oss.aliyuncs.com',
-
-	filters: {
-		mime_types: [ //只允许上传图片和zip,rar文件
-			{
-				title: "Image files",
-				extensions: "jpg,jpeg,png",
-				mimeTypes: 'image/jpg,image/jpeg,image/png'
-			}
-		],
-		max_file_size: '1mb', //最大只能上传10mb的文件
-		prevent_duplicates: true
-		//不允许选取重复文件
-	},
-
-	init: {
-		PostInit: function() {
-			$("#console").html('');
-			serverUrl = '../uploadKey/3';
-		},
-
-		FilesAdded: function(up, files) {
-			$("#ossThumbProgress").show();
-			plupload.each(files,
-				function(file) {
-					$("#thumbFileDescribe").append(file.name + ' (' + plupload.formatSize(file.size) + ') ');
-				});
-			$("#ossBgfile .determinate").show();
-			set_upload_param(thumbUploader, '', false);
-		},
-
-		BeforeUpload: function(up, file) {
-
-			set_upload_param(up, file.name, true);
-		},
-
-		UploadProgress: function(up, file) {
-			$("#thumbFileCompletePersent").html(file.percent + '% ,');
-			$("#ossThumbfile .determinate").width(file.percent + '%');
-		},
-
-		FileUploaded: function(up, file, info) {
-			if(info.status == 200) {
-				$("#thumbFileDescribe").innerHTML = '，上传成功！';
-				thumbImgUrl = host + "/" + get_uploaded_object_name(file.name) + "?x-oss-process=style/thumb-300";
-				$("#uploadThumb").attr('src', thumbImgUrl);
-
-			} else {
-				$("#thumbFileDescribe").innerHTML = info.response;
-			}
-		},
-
-		Error: function(up, err) {
-			if(err.code == -600) {
-				$("#thumbConsole").html('选择的文件太大了，不能超过1M!');
-
-			} else if(err.code == -601) {
-				$("#thumbConsole").html('选择的文件后缀不对!');
-
-			} else if(err.code == -602) {
-				$("#thumbConsole").html("这个文件已经上传过一遍了");
-			} else {
-				$("#thumbConsole").html("上传出错！");
-			}
-		}
-	}
-});
-
+//缩略图上传
+var thumbOSSUploaderObject = new uploadOSSObject("uploadThumb","image/jpg,image/jpeg,image/png","jpg,jpeg,png",'1mb',
+		$("#thumbConsole"),$("#ossThumbProgress"),$("#thumbFileDescribe"),$("#ossThumbfile .determinate"),$("#thumbFileCompletePersent"),$("#uploadThumb"));
+var thumbUploader = createUploader(thumbOSSUploaderObject);
 thumbUploader.init();
 
-var bgUploader = new plupload.Uploader({
-	runtimes: 'html5,flash,silverlight,html4',
-	browse_button: 'uploadBg',
-	//multi_selection: false,
-	//container: document.getElementById('container'),
-	flash_swf_url: '../resources/js/plupload-2.3.1/Moxie.swf',
-	silverlight_xap_url: '../resources/js/plupload-2.3.1/Moxie.xap',
-	url: 'http://oss.aliyuncs.com',
-
-	filters: {
-		mime_types: [ //只允许上传图片和zip,rar文件
-			{
-				title: "Image files",
-				extensions: "jpg,jpeg,png",
-				mimeTypes: 'image/jpg,image/jpeg,image/png'
-			}
-		],
-		max_file_size: '10mb', //最大只能上传10mb的文件
-		prevent_duplicates: true
-		//不允许选取重复文件
-	},
-
-	init: {
-		PostInit: function() {
-			$("#console").html('');
-			serverUrl = '../uploadKey/3';
-		},
-
-		FilesAdded: function(up, files) {
-			$("#ossBgfile .progress").show();
-			plupload.each(files,
-				function(file) {
-					$("#bgFileDescribe").append(file.name + ' (' + plupload.formatSize(file.size) + ') ');
-				});
-			$("#ossBgProgress").show();
-			set_upload_param(bgUploader, '', false);
-		},
-
-		BeforeUpload: function(up, file) {
-
-			set_upload_param(up, file.name, true);
-		},
-
-		UploadProgress: function(up, file) {
-			$("#bgFileCompletePersent").html(file.percent + '% ,');
-			$("#ossBgfile .determinate").width(file.percent + '%');
-		},
-
-		FileUploaded: function(up, file, info) {
-			if(info.status == 200) {
-				$("#bgFileDescribe").innerHTML = '，上传成功！';
-				bgImgUrl = host + "/" + get_uploaded_object_name(file.name) + "?x-oss-process=style/thumb-300";
-				$("#uploadBg").attr('src', bgImgUrl);
-
-			} else {
-				$("#bgFileDescribe").innerHTML = info.response;
-			}
-		},
-
-		Error: function(up, err) {
-			if(err.code == -600) {
-				$("#bgConsole").html('选择的文件太大了，不能超过10M!');
-
-			} else if(err.code == -601) {
-				$("#bgConsole").html('选择的文件后缀不对!');
-
-			} else if(err.code == -602) {
-				$("#bgConsole").html("这个文件已经上传过一遍了");
-			} else {
-				$("#bgConsole").html("上传出错！");
-			}
-		}
-	}
-});
-
+//背景图上传
+var bgOSSUploaderObject = new uploadOSSObject("uploadBg","image/jpg,image/jpeg,image/png","jpg,jpeg,png",'10mb',
+		$("#bgConsole"),$("#ossBgProgress"),$("#bgFileDescribe"),$("#ossBgfile .determinate"),$("#bgFileCompletePersent"),$("#uploadBg"));
+var bgUploader = createUploader(bgOSSUploaderObject);
 bgUploader.init();
 
 function loadingArticleById(id,ue) {
