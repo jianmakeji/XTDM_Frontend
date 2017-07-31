@@ -39,6 +39,28 @@
 	float: right;
 }
 
+#thumbPic{
+	width:100%;
+	height:auto;
+}
+
+#uploadThumb{
+	width:100%;
+	height:auto;
+	overflow:hidden;	
+}
+
+#bgPic{
+	width:100%;
+	height:auto;
+}
+
+#uploadBg{
+	width:100%;
+	height:auto;
+	overflow:hidden;
+}
+
 #dataTable img {
 	width: 100px;
 	height: auto;
