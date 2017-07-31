@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#previewTitle {
+				width: 400px;
+				height: 95%;
+				background-color: #1B6D85;
+				position: absolute;
+				left: 15px;
+				top: 15px;
+			}
+			
+			#previewContent {
+				height: 95%;
+				position: absolute;
+				left: 450px;
+				top: 15px;
+				color: #666666;
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-start
+			}
+			
+			#previewTitleContent {
+				width: 250px;
+				height: 200px;
+				background-color: white;
+				position: absolute;
+				right: 0px;
+				bottom: 0px;
+				color: #666666;
+			}
+			
+			.pptBlock{
+				width: auto;
+				height: 100%;
+				position: relative;
+			}
+			
+			.pptImg{
+				width: auto;
+				height: 100%;
+			}
+			.pptDescribe{
+				width: 97.5%;
+				margin-left: 10px;
+				margin-right: 10px;
+				height: 70px;
+				color: white;
+				position: absolute;
+				
+				bottom: 0px;
+				left: 0px;
+				right: 0px;
+				background-color: #000000;
+				opacity: 0.7;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="previewPanel">
+			<section id="previewTitle">
+				<div id="previewTitleContent">
+					<h1 id="title">“侗心乐坊”设计社会创新工作营开营</h1>
+					<h4 id="category">社区 2016-08-24</h4>
+				</div>
+			</section>
+			<section id="previewContent">
+				<div v-for="data in datas" class="pptBlock">
+					<img :src="data.url" class="pptImg"/>
+					<p class="pptDescribe">{{data.describe}}</p>
+				</div>
+			</section>
+		</div>
+	</body>
+	<script type="text/javascript" src="../resources/js/jquery/jquery-3.2.1.js"></script>
+	<script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+		
+	<script type="text/javascript">
+		(function($) {
+			$.getUrlParam = function(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+		})(jQuery);
+		var title = $.getUrlParam('title');
+		//var pptDataList = window.localStorage.getItem("pptDataList");
+		let windowHeight = $(window).height();
+		
+		//$("#previewContent").append(htmlContent);
+		var bgImage = $.getUrlParam('bgImage');
+		$("#previewTitle").css('background-image','url('+bgImage+')');
+		
+		var app = new Vue({
+  			el: '#previewContent',
+			  data: {
+			    datas: []
+			  }
+		})
+		
+		$(document).ready(function(){
+			
+			
+			var pptDataList = [];
+			pptDataList.push({"url":"../resources/img/background1.jpg","describe":"侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营“侗心乐坊”设计社会创新工作营开营"});
+			pptDataList.push({"url":"../resources/img/background2.jpg","describe":"asdasdasdasd"});
+			pptDataList.push({"url":"../resources/img/background3.jpg","describe":"asdasdasdasd"});
+			
+			console.log(pptDataList);
+			
+			app.datas = pptDataList;
+		 
+		});
+		
+		
+		
+		
+		
+	</script>
+
+</html>
