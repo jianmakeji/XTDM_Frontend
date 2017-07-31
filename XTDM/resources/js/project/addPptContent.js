@@ -531,7 +531,7 @@ $(document).ready(function() {
 			return;
 		}
 		
-		pptDataList.push({'pptPicUrl':pptPicUrl,'describe':describe});
+		pptDataList.push({"pptPicUrl":pptPicUrl,"describe":describe});
 		
 		$("#uploadPpt").attr('str','../resources/img/upload.png');
 		$("#describe").val('');
