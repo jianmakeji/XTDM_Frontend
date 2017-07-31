@@ -58,23 +58,29 @@
 
 #pptPic{
 	width: 30%;
-	height: auto;
-	float: left;	
+	height: 30%;
+	float: left;
+}
+
+#uploadPpt{
+	width: 100%;
+	height: 100%;
+	overflow:hidden;
 }
 
 #describe{
-	width: 40%;
+	width: 60%;
 	height: auto;
 	float: left;
 }
 
-#submit {
+#addPptBtn {
 	position: absolute;
 	bottom: 30px;
 	left: 30%;
 }
 
-#cancel {
+#cancelPptBtn {
 	position: absolute;
 	bottom: 30px;
 	right: 30%;

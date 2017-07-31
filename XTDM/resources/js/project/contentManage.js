@@ -45,7 +45,9 @@ var vum = new Vue({
 			let id = e.currentTarget.id;
 			vum.datas.forEach(function(articleObj) {
 				if(articleObj.id == id) {
+
 					window.localStorage.setItem("articleId", id);
+
 					if(articleObj.type == 0){
 						$("#managePanel").empty();
 						$("#managePanel").load("addArticleContent.html");

@@ -199,9 +199,9 @@ function loadingArticleById(id,ue) {
 		},
 		success: function(data) {
 			$("#title").val(data.object.title);
-			$("#title").addClass('active');
+			$("#titleLabel").addClass('active');
 			$("#abstract").val(data.object.abstractContent);
-			$("#abstract").addClass('active');
+			$("#abstractLabel").addClass('active');
 			var label = data.object.label;
 			var labelArray = label.split(',');
 			var labelData = [];
@@ -221,13 +221,13 @@ function loadingArticleById(id,ue) {
 			else if (recommand == 1){ //推荐 
 				$("#recommand1").attr("checked","checked");
 			}
-			
+
 			$("#categorySelect option[value='"+data.object.categoryId+"']").attr("selected", true);
 			
 			$("#uploadThumb").attr('src', data.object.thumb);
 			$("#uploadBg").attr('src', data.object.bgUrl);
-			ue.setContent(data.object.content);
-			
+			//ue.setContent(data.object.content);
+			ue.execCommand('insertHtml', data.object.content);
 			thumbImgUrl = data.object.thumb;
 			bgImgUrl = data.object.bgUrl;
 			$("#circleProgress").hide();
@@ -270,7 +270,7 @@ $(document).ready(function() {
 		let title = $("#title").val();
 		let abstractData = $("#abstract").val();
 		let tag = $('.chips-initial').material_chip('data');
-		
+
 		var label = "";
 		if (tag.length > 0){
 			tag.forEach(function(object,i){

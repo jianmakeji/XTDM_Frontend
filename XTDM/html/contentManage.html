@@ -15,7 +15,7 @@
 			<div id="conditionPanel">
 				<div id="dropdown" class="input-field">
 					<select id="categorySelect" v-model="selected">
-						<option value="0" disabled>请选择</option>
+						<option value="" disabled>请选择</option>
 						<option v-for="menu in menus" v-bind:value="menu.id">{{menu.name}}</option>
 					</select>
 					<label>选择文章类别</label>

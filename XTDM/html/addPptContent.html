@@ -1,187 +1,188 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-		<link rel="stylesheet" href="../resources/css/project/addPptContent.css" />
-	</head>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../resources/css/project/addPptContent.css" />
+</head>
 
-	<body>
+<body>
 
-		<header class="header">
+	<header class="header"> </header>
+	<section id="content">
 
-		</header>
-		<section id="content">
+		<div id="contentHeader">
+			<button id="submitBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">
+				提交 <i class="material-icons right">send</i>
+			</button>
+			<button id="browserBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">
+				预览 <i class="material-icons right">view_stream</i>
+			</button>
+			<button id="cancelBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">
+				取消 <i class="material-icons right">replay</i>
+			</button>
+		</div>
 
-			<div id="contentHeader">
-				<button id="submitBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">提交
-    				<i class="material-icons right">send</i>
-  				</button>
-				<button id="browserBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">预览
-    				<i class="material-icons right">view_stream</i>
-  				</button>
-				<button id="cancelBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">取消
-    				<i class="material-icons right">replay</i>
-  				</button>
-			</div>
-
-			<section id="pptContent">
-				<div id="picTxt" class="col s12">
-					<div class="row">
-						<div class="input-field col s12">
-							<i class="small material-icons prefix">subtitles</i>
-							<input id="title" type="text" class="validate">
-							<label for="text">标题</label>
-						</div>
-					</div>
-					<div class="row">
-						<div class="input-field col s12">
-							<i class="small material-icons prefix">subtitles</i>
-							<textarea id="abstract" class="materialize-textarea"></textarea>
-							<label for="abstract">摘要</label>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col s12">
-							<i class="small material-icons prefix">note_add</i>
-							<div id="tag" class="chips chips-initial"></div>
-						</div>
-					</div>
-					<div class="row">
-						<label>文章类别:</label>
-						<div id="dropdown" class="input-field">
-							<select id="categorySelect" v-model="selected" class="browser-default">
-								<option value="" disabled selected>选择文章类别</option>
-								<option v-for="menu in menus" :value="menu.id">{{menu.name}}</option>
-							</select>
-						</div>
-
-						<div id="recommand">
-							<label>是否设置为推荐</label>
-							<p>
-								<input name="recommandGroup" type="radio" id="recommand1" />
-								<label for="recommand1">是</label>
-
-								<input name="recommandGroup" type="radio" id="recommand2" />
-								<label for="recommand2">否</label>
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<button id="addFile" class="btn waves-effect waves-light cyan lighten-1">上传文件
-    				
-  						</button>
-					</div>
-
-					<div class="row">
-						<div id="dataTable">
-							<table class="striped centered">
-								<thead>
-									<tr>
-										<th>图片</th>
-										<th>描述</th>
-										<th>操作</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr v-for="value in datas">
-										<td><img :src="value.pptPic" /></td>
-										<td>{{value.describe}}</td>
-										<td><a href="#" :id="value.pptPic" @click="updateData($event)">修改</a>
-										<a href="#" :id="value.pptPic" @click="deleteData($event)">删除</a></td>
-									</tr>
-								</tbody>
-								<tfoot>
-
-								</tfoot>
-							</table>
-
-						</div>
-					</div>
-			</section>
-
-			<aside id="asideContent">
+		<section id="pptContent">
+			<div id="picTxt" class="col s12">
 				<div class="row">
-					<div id="thumbPic">
-
-						<p>缩略图：图片比例为1:1</p>
-						<img id="uploadThumb" src="../resources/img/upload.png" />
-						<div id="uploadThumbInfo">
-							<div id="ossThumbfile">
-								<div><b id="thumbFileDescribe"><span id="thumbFileCompletePersent"></span></b>
-									<div id="ossThumbProgress" class="progress">
-										<div class="determinate" style="width: 1%"></div>
-									</div>
-								</div>'
-							</div>
-							<pre id="thumbConsole"></pre>
-							<p>&nbsp;</p>
-						</div>
-
+					<div class="input-field col s12">
+						<i class="small material-icons prefix">subtitles</i> <input id="title" type="text" class="validate"> <label id="titleLabel" for="text">标题</label>
 					</div>
-
-					<div id="bgPic">
-
-						<p>背景图：请上传1280*720尺寸的图片</p>
-						<img id="uploadBg" src="../resources/img/upload.png" />
-						<div id="uploadBgInfo">
-							<div id="ossBgfile">
-								<div><b id="bgFileDescribe"><span id="bgFileCompletePersent"></span></b>
-									<div id="ossBgProgress" class="progress">
-										<div class="determinate" style="width: 1%"></div>
-									</div>
-								</div>'
-							</div>
-							<pre id="bgConsole"></pre>
-							<p>&nbsp;</p>
-						</div>
-					</div>
-
 				</div>
-			</aside>
+				<div class="row">
+					<div class="input-field col s12">
+						<i class="small material-icons prefix">subtitles</i>
+						<textarea id="abstract" class="materialize-textarea"></textarea>
+						<label id="abstractLabel" for="abstract">摘要</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<i class="small material-icons prefix">note_add</i>
+						<div id="tag" class="chips chips-initial"></div>
+					</div>
+				</div>
+				<div class="row">
+					<label>文章类别:</label>
+					<div id="dropdown" class="input-field">
+						<select id="categorySelect" v-model="selected" class="browser-default">
+							<option value="" disabled selected>选择文章类别</option>
+							<option v-for="menu in menus" :value="menu.id">{{menu.name}}</option>
+						</select>
+					</div>
 
-			</div>
+					<div id="recommand">
+						<label>是否设置为推荐</label>
+						<p>
+							<input name="recommandGroup" type="radio" value="1" id="recommand1" /> 
+							<label for="recommand1">是</label> 
+							<input name="recommandGroup" type="radio" value="0" id="recommand2" checked />
+							<label for="recommand2">否</label>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<button id="addFile" class="btn waves-effect waves-light cyan lighten-1">上传文件</button>
+				</div>
+
+				<div class="row">
+					<div id="dataTable">
+						<table class="striped centered">
+							<thead>
+								<tr>
+									<th>图片</th>
+									<th>描述</th>
+									<th style="width: 90px">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="value in datas">
+									<td><img :src="value.pptPicUrl" /></td>
+									<td>{{value.describe}}</td>
+									<td><a href="#" :id="value.pptPicUrl" @click="updateData($event)">修改</a> <a href="#" :id="value.pptPicUrl" @click="deleteData($event)">删除</a></td>
+								</tr>
+							</tbody>
+							<tfoot>
+
+							</tfoot>
+						</table>
+
+					</div>
+				</div>
 		</section>
 
-		<section id="addPanel">
-			<div id="addPanelForm">
-				<div id="pptPic">
-					<p>幻灯片图片：</p>
-					<img id="uploadPpt" src="../resources/img/upload.png" />
-					<div id="uploadPptInfo">
-						<div id="ossPptfile">
-							<div><b id="pptFileDescribe"><span id="pptFileCompletePersent"></span></b>
-								<div id="ossPptProgress" class="progress">
+		<aside id="asideContent">
+			<div class="row">
+				<div id="thumbPic">
+
+					<p>缩略图：图片比例为1:1</p>
+					<img id="uploadThumb" src="../resources/img/upload.png" />
+					<div id="uploadThumbInfo">
+						<div id="ossThumbfile">
+							<div>
+								<b id="thumbFileDescribe"><span id="thumbFileCompletePersent"></span></b>
+								<div id="ossThumbProgress" class="progress">
 									<div class="determinate" style="width: 1%"></div>
 								</div>
-							</div>'
+							</div>
+							'
 						</div>
-						<pre id="pptConsole"></pre>
+						<pre id="thumbConsole"></pre>
 						<p>&nbsp;</p>
 					</div>
 
 				</div>
 
-				<div id="describe" class="row">
-					<div class="input-field col s12">
-						<i class="small material-icons prefix">subtitles</i>
-						<textarea id="textarea1" class="materialize-textarea"></textarea>
-						<label for="textarea1">描述</label>
+				<div id="bgPic">
+
+					<p>背景图：请上传1280*720尺寸的图片</p>
+					<img id="uploadBg" src="../resources/img/upload.png" />
+					<div id="uploadBgInfo">
+						<div id="ossBgfile">
+							<div>
+								<b id="bgFileDescribe"><span id="bgFileCompletePersent"></span></b>
+								<div id="ossBgProgress" class="progress">
+									<div class="determinate" style="width: 1%"></div>
+								</div>
+							</div>
+							'
+						</div>
+						<pre id="bgConsole"></pre>
+						<p>&nbsp;</p>
 					</div>
 				</div>
+
+			</div>
+		</aside>
+
+		</div>
+	</section>
+
+	<section id="addPanel">
+		<div id="addPanelForm" class="row">
+			<div id="pptPic">
+				<p>幻灯片图片：</p>
+				<img id="uploadPpt" src="../resources/img/upload.png" />
+				<div id="uploadPptInfo">
+					<div id="ossPptfile">
+						<div>
+							<b id="pptFileDescribe"><span id="pptFileCompletePersent"></span></b>
+							<div id="ossPptProgress" class="progress">
+								<div class="determinate" style="width: 1%"></div>
+							</div>
+						</div>
+						'
+					</div>
+					<pre id="pptConsole"></pre>
+					<p>&nbsp;</p>
+				</div>
+
 			</div>
 
-			<button id="addPptBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">提交
-    			<i class="material-icons right">send</i>
-  			</button>
-			<button id="cancelPptBtn" class="btn waves-effect waves-light cyan lighten-1" type="submit" name="action">取消
-    			<i class="material-icons right">replay</i>
-  			</button>
-		</section>
-	</body>
-	<script type="text/javascript" src="../resources/js/plupload-2.3.1/plupload.full.min.js" charset="UTF-8"></script>
-	<script type="text/javascript" src="../resources/js/project/ossupload.js"></script>
-	<script type="text/javascript" src="../resources/js/project/addPptContent.js"></script>
+			<div id="describe" class="row">
+				<div class="input-field col s12">
+					<i class="small material-icons prefix">subtitles</i>
+					<textarea id="textarea1" class="materialize-textarea"></textarea>
+					<label for="textarea1">描述</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<button id="addPptBtn" class="btn waves-effect waves-light cyan lighten-1">
+				提交 <i class="material-icons right">send</i>
+			</button>
+			<button id="cancelPptBtn" class="btn waves-effect waves-light cyan lighten-1">
+				取消 <i class="material-icons right">replay</i>
+			</button>
+		</div>
+
+
+	</section>
+</body>
+<script type="text/javascript" src="../resources/js/plupload-2.3.1/plupload.full.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../resources/js/project/ossupload.js"></script>
+<script type="text/javascript" src="../resources/js/project/addPptContent.js"></script>
 
 </html>

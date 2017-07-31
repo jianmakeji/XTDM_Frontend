@@ -1,6 +1,4 @@
-var thumbImgUrl = "";
-var bgImgUrl = "";
-var categoryId = 1;
+var categoryId = 0;
 var insertOrUpdate = 0;
 
 var pptDataList = [];
@@ -30,238 +28,25 @@ $.getJSON("../category/getCategoryByPage",{offset:0,limit:1000}, function(data) 
 	})
 });
 
-var thumbUploader = new plupload.Uploader({
-	runtimes: 'html5,flash,silverlight,html4',
-	browse_button: 'uploadThumb',
-	//multi_selection: false,
-	//container: document.getElementById('container'),
-	flash_swf_url: '../resources/js/plupload-2.3.1/Moxie.swf',
-	silverlight_xap_url: '../resources/js/plupload-2.3.1/Moxie.xap',
-	url: 'http://oss.aliyuncs.com',
-
-	filters: {
-		mime_types: [ //只允许上传图片和zip,rar文件
-			{
-				title: "Image files",
-				extensions: "jpg,jpeg,png",
-				mimeTypes: 'image/jpg,image/jpeg,image/png'
-			}
-		],
-		max_file_size: '1mb', //最大只能上传10mb的文件
-		prevent_duplicates: true
-		//不允许选取重复文件
-	},
-
-	init: {
-		PostInit: function() {
-			$("#console").html('');
-			serverUrl = '../uploadKey/3';
-		},
-
-		FilesAdded: function(up, files) {
-			$("#ossThumbProgress").show();
-			plupload.each(files,
-				function(file) {
-					$("#thumbFileDescribe").append(file.name + ' (' + plupload.formatSize(file.size) + ') ');
-				});
-			$("#ossBgfile .determinate").show();
-			set_upload_param(thumbUploader, '', false);
-		},
-
-		BeforeUpload: function(up, file) {
-
-			set_upload_param(up, file.name, true);
-		},
-
-		UploadProgress: function(up, file) {
-			$("#thumbFileCompletePersent").html(file.percent + '% ,');
-			$("#ossThumbfile .determinate").width(file.percent + '%');
-		},
-
-		FileUploaded: function(up, file, info) {
-			if(info.status == 200) {
-				$("#thumbFileDescribe").innerHTML = '，上传成功！';
-				thumbImgUrl = host + "/" + get_uploaded_object_name(file.name) + "?x-oss-process=style/thumb-300";
-				$("#uploadThumb").attr('src', thumbImgUrl);
-
-			} else {
-				$("#thumbFileDescribe").innerHTML = info.response;
-			}
-		},
-
-		Error: function(up, err) {
-			if(err.code == -600) {
-				$("#thumbConsole").html('选择的文件太大了，不能超过1M!');
-
-			} else if(err.code == -601) {
-				$("#thumbConsole").html('选择的文件后缀不对!');
-
-			} else if(err.code == -602) {
-				$("#thumbConsole").html("这个文件已经上传过一遍了");
-			} else {
-				$("#thumbConsole").html("上传出错！");
-			}
-		}
-	}
-});
-
+//缩略图上传
+var thumbOSSUploaderObject = new uploadOSSObject("uploadThumb","image/jpg,image/jpeg,image/png","jpg,jpeg,png",'1mb',
+		$("#thumbConsole"),$("#ossThumbProgress"),$("#thumbFileDescribe"),$("#ossThumbfile .determinate"),$("#thumbFileCompletePersent"),$("#uploadThumb"));
+var thumbUploader = createUploader(thumbOSSUploaderObject);
 thumbUploader.init();
 
-var bgUploader = new plupload.Uploader({
-	runtimes: 'html5,flash,silverlight,html4',
-	browse_button: 'uploadBg',
-	//multi_selection: false,
-	//container: document.getElementById('container'),
-	flash_swf_url: '../resources/js/plupload-2.3.1/Moxie.swf',
-	silverlight_xap_url: '../resources/js/plupload-2.3.1/Moxie.xap',
-	url: 'http://oss.aliyuncs.com',
+//背景图上传
+var bgOSSUploaderObject = new uploadOSSObject("uploadBg","image/jpg,image/jpeg,image/png","jpg,jpeg,png",'10mb',
+		$("#bgConsole"),$("#ossBgProgress"),$("#bgFileDescribe"),$("#ossBgfile .determinate"),$("#bgFileCompletePersent"),$("#uploadBg"));
+var bgUploader = createUploader(bgOSSUploaderObject);
+bgUploader.init();
 
-	filters: {
-		mime_types: [ //只允许上传图片和zip,rar文件
-			{
-				title: "Image files",
-				extensions: "jpg,jpeg,png",
-				mimeTypes: 'image/jpg,image/jpeg,image/png'
-			}
-		],
-		max_file_size: '10mb', //最大只能上传10mb的文件
-		prevent_duplicates: true
-		//不允许选取重复文件
-	},
-
-	init: {
-		PostInit: function() {
-			$("#console").html('');
-			serverUrl = '../uploadKey/3';
-		},
-
-		FilesAdded: function(up, files) {
-			$("#ossBgfile .progress").show();
-			plupload.each(files,
-				function(file) {
-					$("#bgFileDescribe").append(file.name + ' (' + plupload.formatSize(file.size) + ') ');
-				});
-			$("#ossBgProgress").show();
-			set_upload_param(bgUploader, '', false);
-		},
-
-		BeforeUpload: function(up, file) {
-
-			set_upload_param(up, file.name, true);
-		},
-
-		UploadProgress: function(up, file) {
-			$("#bgFileCompletePersent").html(file.percent + '% ,');
-			$("#ossBgfile .determinate").width(file.percent + '%');
-		},
-
-		FileUploaded: function(up, file, info) {
-			if(info.status == 200) {
-				$("#bgFileDescribe").innerHTML = '，上传成功！';
-				var pptImgUrl = host + "/" + get_uploaded_object_name(file.name) + "?x-oss-process=style/thumb-300";
-				$("#uploadBg").attr('src', bgImgUrl);
-
-			} else {
-				$("#bgFileDescribe").innerHTML = info.response;
-			}
-		},
-
-		Error: function(up, err) {
-			if(err.code == -600) {
-				$("#bgConsole").html('选择的文件太大了，不能超过10M!');
-
-			} else if(err.code == -601) {
-				$("#bgConsole").html('选择的文件后缀不对!');
-
-			} else if(err.code == -602) {
-				$("#bgConsole").html("这个文件已经上传过一遍了");
-			} else {
-				$("#bgConsole").html("上传出错！");
-			}
-		}
-	}
-});
-
+//幻灯片上传
+var pptOSSUploaderObject = new uploadOSSObject("uploadPpt","image/jpg,image/jpeg,image/png","jpg,jpeg,png",'10mb',
+		$("#pptConsole"),$("#ossPptProgress"),$("#pptFileDescribe"),$("#ossPptfile .determinate"),$("#pptFileCompletePersent"),$("#uploadPpt"));
+var pptUploader = createUploader(pptOSSUploaderObject);	
 pptUploader.init();
 
-var bgUploader = new plupload.Uploader({
-	runtimes: 'html5,flash,silverlight,html4',
-	browse_button: 'uploadPpt',
-	//multi_selection: false,
-	//container: document.getElementById('container'),
-	flash_swf_url: '../resources/js/plupload-2.3.1/Moxie.swf',
-	silverlight_xap_url: '../resources/js/plupload-2.3.1/Moxie.xap',
-	url: 'http://oss.aliyuncs.com',
-
-	filters: {
-		mime_types: [ //只允许上传图片和zip,rar文件
-			{
-				title: "Image files",
-				extensions: "jpg,jpeg,png",
-				mimeTypes: 'image/jpg,image/jpeg,image/png'
-			}
-		],
-		max_file_size: '10mb', //最大只能上传10mb的文件
-		prevent_duplicates: true
-		//不允许选取重复文件
-	},
-
-	init: {
-		PostInit: function() {
-			$("#console").html('');
-			serverUrl = '../uploadKey/3';
-		},
-
-		FilesAdded: function(up, files) {
-			$("#ossPptfile .progress").show();
-			plupload.each(files,
-				function(file) {
-					$("#pptFileDescribe").append(file.name + ' (' + plupload.formatSize(file.size) + ') ');
-				});
-			$("#ossPptProgress").show();
-			set_upload_param(bgUploader, '', false);
-		},
-
-		BeforeUpload: function(up, file) {
-
-			set_upload_param(up, file.name, true);
-		},
-
-		UploadProgress: function(up, file) {
-			$("#pptFileCompletePersent").html(file.percent + '% ,');
-			$("#ossPptfile .determinate").width(file.percent + '%');
-		},
-
-		FileUploaded: function(up, file, info) {
-			if(info.status == 200) {
-				$("#pptFileDescribe").innerHTML = '，上传成功！';
-				bgImgUrl = host + "/" + get_uploaded_object_name(file.name) + "?x-oss-process=style/thumb-300";
-				$("#uploadPpt").attr('src', bgImgUrl);
-
-			} else {
-				$("#pptFileDescribe").innerHTML = info.response;
-			}
-		},
-
-		Error: function(up, err) {
-			if(err.code == -600) {
-				$("#pptConsole").html('选择的文件太大了，不能超过10M!');
-
-			} else if(err.code == -601) {
-				$("#pptConsole").html('选择的文件后缀不对!');
-
-			} else if(err.code == -602) {
-				$("#pptConsole").html("这个文件已经上传过一遍了");
-			} else {
-				$("#pptConsole").html("上传出错！");
-			}
-		}
-	}
-});
-
-pptUploader.init();
-
-function loadingArticleById(id,ue) {
+function loadingArticleById(id) {
 
 	$.ajax({
 		type: "GET",
@@ -273,9 +58,10 @@ function loadingArticleById(id,ue) {
 		},
 		success: function(data) {
 			$("#title").val(data.object.title);
-			$("#title").addClass('active');
+			$("#titleLabel").addClass('active');
 			$("#abstract").val(data.object.abstractContent);
-			$("#abstract").addClass('active');
+			$("#abstractLabel").addClass('active');
+			
 			var label = data.object.label;
 			var labelArray = label.split(',');
 			var labelData = [];
@@ -302,7 +88,9 @@ function loadingArticleById(id,ue) {
 			$("#uploadBg").attr('src', data.object.bgUrl);
 			
 			pptDataList = JSON.parse(data.object.content);
+			vum.datas = pptDataList;
 			
+			console.log(pptDataList);
 			thumbImgUrl = data.object.thumb;
 			bgImgUrl = data.object.bgUrl;
 			$("#circleProgress").hide();
@@ -327,12 +115,14 @@ var vum = new Vue({
 	methods: {
 		updateData: function(e) {
 			let id = e.currentTarget.id;
+
 			vum.datas.forEach(function(pptObj) {
-				if(pptObj.id == id) {
+
+				if(pptObj.pptPicUrl == id) {
 					showCategory = 1;
 					$("#addPanel").show('slow');
-					$("#uploadPpt").attr('str',pptObj.pptPicUrl);
-					$("#describe").val(pptObj.describe);
+					$("#uploadPpt").attr('src',pptObj.pptPicUrl);
+					$("#textarea1").val(pptObj.describe);
 				}
 			});
 		},
@@ -340,7 +130,7 @@ var vum = new Vue({
 			let id = e.currentTarget.id;
 			var i = 0;
 			vum.datas.forEach(function(pptObj) {
-				if(pptObj.id == id) {
+				if(pptObj.pptPicUrl == id) {
 					vum.datas.splice(i,1);
 				}
 				i = i + 1;
@@ -353,11 +143,14 @@ var vum = new Vue({
 $(document).ready(function() {
 	$("#ossThumbProgress").hide();
 	$("#ossBgProgress").hide();
-      
+	$("#ossPptProgress").hide();
+
+	let aliyunOSSUrl = "aliyuncs.com";
+	
 	var id = window.localStorage.getItem("articleId");
 	
 	if(id > 0) { //编辑操作
-		loadingArticleById(id,ue);
+		loadingArticleById(id);
 	}
 
 	$('.chips-initial').material_chip({
@@ -372,6 +165,9 @@ $(document).ready(function() {
 		let title = $("#title").val();
 		let abstractData = $("#abstract").val();
 		let tag = $('.chips-initial').material_chip('data');
+		
+		let thumbImgUrl = $("#uploadThumb").attr('src');
+		let bgImgUrl = $("#uploadBg").attr('src');
 		
 		var label = "";
 		if (tag.length > 0){
@@ -402,6 +198,16 @@ $(document).ready(function() {
 		
 		if (pptDataList.length == 0){
 			Materialize.toast('请上传幻灯片图片!', 4000);
+			return;
+		}
+		
+		if(!$("#uploadThumb").text().indexOf(aliyunOSSUrl) > 0 ) {
+			Materialize.toast('缩略图不能为空!', 4000);
+			return;
+		}
+		
+		if(!$("#uploadBg").text().indexOf(aliyunOSSUrl) > 0 ) {
+			Materialize.toast('背景图片不能为空!', 4000);
 			return;
 		}
 		
@@ -465,6 +271,9 @@ $(document).ready(function() {
 		let abstractData = $("#abstract").val();
 		let tag = $('.chips-initial').material_chip('data');
 
+		let thumbImgUrl = $("#uploadThumb").attr('src');
+		let bgImgUrl = $("#uploadBg").attr('src');
+		
 		if(title == "") {
 			Materialize.toast('标题不能为空!', 4000);
 			return;
@@ -489,6 +298,17 @@ $(document).ready(function() {
 			Materialize.toast('幻灯片内容不能为空!', 4000);
 			return;
 		}
+		
+		if(!$("#uploadThumb").text().indexOf(aliyunOSSUrl) > 0 ) {
+			Materialize.toast('缩略图不能为空!', 4000);
+			return;
+		}
+		
+		if(!$("#uploadBg").text().indexOf(aliyunOSSUrl) > 0 ) {
+			Materialize.toast('背景图片不能为空!', 4000);
+			return;
+		}
+		
 		window.localStorage.setItem("pptDataList", JSON.stringify(pptDataList));
 
 		window.open("pptPreview.html?title=" + title + "&bgImgUrl=" + bgImgUrl);
@@ -512,16 +332,16 @@ $(document).ready(function() {
 
 	$("#cancelPptBtn").click(function() {
 		showCategory = 0;
-		$("#uploadPpt").attr('str','../resources/img/upload.png');
+		$("#uploadPpt").attr('src','../resources/img/upload.png');
 		$("#describe").val('');
 		$("#addPanel").hide();
 	});
 	
 	$("#addPptBtn").click(function(){
-		var pptPicUrl = $("#uploadPpt").attr('str');
-		var describe = $("#describe").val();
-		
-		if(pptPic.indexOf("http://oss.aliyuncs.com") >= 0 ) {
+		var pptPicUrl = $("#uploadPpt").attr('src');
+		var describe = $("#textarea1").val();
+
+		if(!pptPicUrl.indexOf(aliyunOSSUrl) > 0) {
 			Materialize.toast('图片不能为空!', 4000);
 			return;
 		}
@@ -532,9 +352,16 @@ $(document).ready(function() {
 		}
 		
 		pptDataList.push({"pptPicUrl":pptPicUrl,"describe":describe});
+		console.log(pptDataList);
 		
-		$("#uploadPpt").attr('str','../resources/img/upload.png');
-		$("#describe").val('');
+		$("#uploadPpt").attr('src','../resources/img/upload.png');
+		$("#textarea1").val('');
+		$("#ossPptProgress").hide();
+		$("#pptConsole").html('');
+		$("#pptFileDescribe").html('');
+		$("#pptFileCompletePersent").html('');
 		$("#addPanel").hide();
+		$(".determinate").css("width","1%");
+		showCategory = 0;
 	});
 });

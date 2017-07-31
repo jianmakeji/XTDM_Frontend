@@ -198,6 +198,7 @@ function resetPanel() {
 	$("#authorLabel").removeClass('active');
 	insertOrUpdate = 0;
 	showCategory = 0;
+	mp3Url = "";
 }
 
 function getDataList(offset) {
